@@ -141,7 +141,7 @@ export const useLpTokenPrice = (symbol: string) => {
 
   return lpTokenPrice
 }
-
+// TODO---THANHNV: lấy giá cake token ở đây
 // /!\ Deprecated , use the BUSD hook in /hooks
 
 export const usePriceCakeBusd = (): BigNumber => {

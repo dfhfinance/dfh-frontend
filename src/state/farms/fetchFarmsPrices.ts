@@ -86,6 +86,7 @@ const getFarmQuoteTokenPrice = (
 }
 
 const fetchFarmsPrices = async (farms: SerializedFarm[]) => {
+  // TODO---THANHNV: config lấy giá token BNB ở đây (pid = 252 tương ứng với farmer của Pancake)
   const bnbBusdFarm = farms.find((farm) => farm.pid === 252)
   const bnbPriceBusd = bnbBusdFarm.tokenPriceVsQuote ? BIG_ONE.div(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
 

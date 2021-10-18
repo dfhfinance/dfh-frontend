@@ -8,6 +8,7 @@ interface Window {
   BinanceChain?: {
     bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
   }
+  store?: unknown
 }
 
 type SerializedBigNumber = string

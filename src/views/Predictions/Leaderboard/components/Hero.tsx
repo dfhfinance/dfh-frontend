@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading } from '@pancakeswap/uikit'
+import { Heading } from '@dfh-finance/uikit'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
 import Crumbs from './Crumbs'

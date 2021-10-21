@@ -13,7 +13,7 @@ import {
   CloseIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-} from '@pancakeswap/uikit'
+} from '@dfh-finance/uikit'
 import orderBy from 'lodash/orderBy'
 import { useAppDispatch } from 'state'
 import { filterNftsFromCollection } from 'state/nftMarket/reducer'
@@ -38,7 +38,7 @@ interface State {
 const TriggerButton = styled(Button)<{ hasItem: boolean }>`
   ${({ hasItem }) =>
     hasItem &&
-    `  
+    `
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-right: 8px;

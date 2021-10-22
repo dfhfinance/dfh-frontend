@@ -30,7 +30,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
 
   const { account } = useWeb3React()
   const { userNftsInitializationState, nfts: userNfts } = useUserNfts()
-  useFetchUserNfts(account)
+  useFetchUserNfts()
 
   useEffect(() => {
     const fetchNftData = async () => {
@@ -57,6 +57,8 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
         setNft(nftOwnedByConnectedUser)
         setIsOwnNft(true)
       } else {
+        // reset to defaults
+        setIsOwnNft(false)
         // Get metadata and market data separately if connected user is not the owner
         fetchNftData()
       }

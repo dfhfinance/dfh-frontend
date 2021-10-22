@@ -1,8 +1,7 @@
+import { Flex } from '@dfh-finance/uikit'
+import { PageMeta } from 'components/Layout/Page'
 import React from 'react'
 import styled from 'styled-components'
-import { Flex } from '@dfh-finance/uikit'
-import Footer from 'components/Menu/Footer'
-import { PageMeta } from 'components/Layout/Page'
 
 const StyledPage = styled.div`
   display: flex;
@@ -36,7 +35,6 @@ const Page: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...pro
       <StyledPage {...props}>
         {children}
         <Flex flexGrow={1} />
-        <Footer />
       </StyledPage>
     </>
   )

@@ -15,27 +15,27 @@ const farms: SerializedFarmConfig[] = [
     lpSymbol: 'CAKE',
     lpAddresses: {
       97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
-      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+      56: '0x26aB5131DD666B4179aC909926ee3C18eE05E470',
     },
     token: serializedTokens.syrup,
     quoteToken: serializedTokens.wbnb,
   },
   {
-    pid: 251,
+    pid: 1,
     lpSymbol: 'CAKE-BNB LP',
     lpAddresses: {
       97: '0x3ed8936cAFDF85cfDBa29Fbe5940A5b0524824F4',
-      56: '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
+      56: '0xDAC965EcF6f44C95e1934Ce311438C3eFF2a17e6',
     },
-    token: serializedTokens.cake,
+    token: serializedTokens.milk,
     quoteToken: serializedTokens.wbnb,
   },
   {
-    pid: 252,
+    pid: 4,
     lpSymbol: 'BUSD-BNB LP',
     lpAddresses: {
       97: '',
-      56: '0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16',
+      56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
     },
     token: serializedTokens.busd,
     quoteToken: serializedTokens.wbnb,
@@ -138,16 +138,16 @@ const farms: SerializedFarmConfig[] = [
   //   token: serializedTokens.nft,
   //   quoteToken: serializedTokens.wbnb,
   // },
-  {
-    pid: 429,
-    lpSymbol: 'CHESS-USDC LP',
-    lpAddresses: {
-      97: '',
-      56: '0x1472976e0b97f5b2fc93f1fff14e2b5c4447b64f',
-    },
-    token: serializedTokens.chess,
-    quoteToken: serializedTokens.usdc,
-  },
+  // {
+  //   pid: 429,
+  //   lpSymbol: 'CHESS-USDC LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x1472976e0b97f5b2fc93f1fff14e2b5c4447b64f',
+  //   },
+  //   token: serializedTokens.chess,
+  //   quoteToken: serializedTokens.usdc,
+  // },
   // {
   //   pid: 447,
   //   lpSymbol: 'GNT-BNB LP',
@@ -4472,16 +4472,16 @@ const farms: SerializedFarmConfig[] = [
   //   token: serializedTokens.inj,
   //   quoteToken: serializedTokens.wbnb,
   // },
-  {
-    pid: 29,
-    lpSymbol: 'USDC-BNB LP',
-    lpAddresses: {
-      97: '0xE66790075ad839978fEBa15D4d8bB2b415556a1D',
-      56: '0x30479874f9320a62bce3bc0e315c920e1d73e278',
-    },
-    token: serializedTokens.usdc,
-    quoteToken: serializedTokens.wbnb,
-  },
+  // {
+  //   pid: 29,
+  //   lpSymbol: 'USDC-BNB LP',
+  //   lpAddresses: {
+  //     97: '0xE66790075ad839978fEBa15D4d8bB2b415556a1D',
+  //     56: '0x30479874f9320a62bce3bc0e315c920e1d73e278',
+  //   },
+  //   token: serializedTokens.usdc,
+  //   quoteToken: serializedTokens.wbnb,
+  // },
   // {
   //   pid: 30,
   //   lpSymbol: 'SXP-BNB LP',

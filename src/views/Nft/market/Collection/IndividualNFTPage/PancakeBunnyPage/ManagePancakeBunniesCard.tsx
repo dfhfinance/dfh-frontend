@@ -12,7 +12,7 @@ import {
   BinanceIcon,
   Skeleton,
   useModal,
-} from '@pancakeswap/uikit'
+} from '@dfh-finance/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useUserNfts } from 'state/nftMarket/hooks'
 import { NftLocation, NftToken, UserNftInitializationState } from 'state/nftMarket/types'
@@ -136,7 +136,7 @@ const ManagePancakeBunniesCard: React.FC<ManagePancakeBunniesCardProps> = ({ bun
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { userNftsInitializationState, nfts: userNfts } = useUserNfts()
-  useFetchUserNfts(account)
+  useFetchUserNfts()
 
   const bunniesInWallet = userNfts.filter(
     (nft) => nft.attributes[0].value === bunnyId && nft.location === NftLocation.WALLET,

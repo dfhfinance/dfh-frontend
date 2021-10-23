@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@dfh-finance/uikit'
 
 const Card = styled(Box)<{
   width?: string

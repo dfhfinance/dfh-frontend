@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@dfh-finance/uikit'
 import Page from 'components/Layout/Page'
 import { Route, useParams } from 'react-router'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
@@ -11,7 +11,7 @@ import TabMenu from './components/TabMenu'
 import Achievements from './components/Achievements'
 import ActivityHistory from './components/ActivityHistory'
 import SubMenu from './components/SubMenu'
-import useGetNftsForAddress from './hooks/useGetNftsForAddress'
+import useNftsForAddress from './hooks/useNftsForAddress'
 import UnconnectedProfileNfts from './components/UnconnectedProfileNfts'
 
 const TabMenuWrapper = styled(Box)`
@@ -31,7 +31,7 @@ const UnconnectedProfile = () => {
   const { profile: profileHookState, isFetching: isProfileFetching } = useProfileForAddress(accountAddress)
   const { profile } = profileHookState || {}
   const { achievements } = useAchievementsForAddress(accountAddress)
-  const { nfts, isLoading } = useGetNftsForAddress(accountAddress, profile, isProfileFetching)
+  const { nfts, isLoading } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   return (
     <>

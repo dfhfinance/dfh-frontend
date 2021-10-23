@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, Card, CardBody, Heading, Text } from '@pancakeswap/uikit'
+import { AutoRenewIcon, Button, Card, CardBody, Heading, Text } from '@dfh-finance/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { Link as RouterLink } from 'react-router-dom'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
@@ -25,13 +25,13 @@ const NftWrapper = styled.div`
 `
 
 const ProfilePicture: React.FC = () => {
-  const { library, account } = useWeb3React()
+  const { library } = useWeb3React()
   const [isApproved, setIsApproved] = useState(false)
   const [isApproving, setIsApproving] = useState(false)
   const { selectedNft, actions } = useContext(ProfileCreationContext)
 
   const { nfts, userNftsInitializationState } = useUserNfts()
-  useFetchUserNfts(account)
+  useFetchUserNfts()
 
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()

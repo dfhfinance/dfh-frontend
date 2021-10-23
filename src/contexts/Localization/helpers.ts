@@ -1,4 +1,4 @@
-import { EN } from 'config/localization/languages'
+import { VI } from 'config/localization/languages'
 
 const publicUrl = process.env.PUBLIC_URL
 
@@ -14,8 +14,8 @@ export const getLanguageCodeFromLS = () => {
   try {
     const codeFromStorage = localStorage.getItem(LS_KEY)
 
-    return codeFromStorage || EN.locale
+    return codeFromStorage || VI.locale
   } catch {
-    return EN.locale
+    return VI.locale
   }
 }

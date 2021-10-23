@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Box, Card, CardBody, Text, Button, BinanceIcon, Skeleton, useModal } from '@pancakeswap/uikit'
+import { Flex, Box, Card, CardBody, Text, Button, BinanceIcon, Skeleton, useModal } from '@dfh-finance/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { NftToken } from 'state/nftMarket/types'
@@ -66,7 +66,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
               <Text fontSize="40px" bold mt="12px">
                 {nft.name}
               </Text>
-              <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>
+              {nft.description && <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>}
               <Text color="textSubtle" mt={['16px', '16px', '48px']}>
                 {t('Price')}
               </Text>

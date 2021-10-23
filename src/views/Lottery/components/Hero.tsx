@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { Box, Flex, Heading, Skeleton } from '@pancakeswap/uikit'
+import { Box, Flex, Heading, Skeleton } from '@dfh-finance/uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceCakeBusd } from 'state/farms/hooks'
@@ -19,7 +19,7 @@ const floatingStarsLeft = keyframes`
   }
   to {
     transform: translate(0, -0px);
-  }  
+  }
 `
 
 const floatingStarsRight = keyframes`
@@ -31,7 +31,7 @@ const floatingStarsRight = keyframes`
   }
   to {
     transform: translate(0, -0px);
-  }  
+  }
 `
 
 const floatingTicketLeft = keyframes`
@@ -43,7 +43,7 @@ const floatingTicketLeft = keyframes`
   }
   to {
     transform: translate(0, -0px);
-  }  
+  }
 `
 
 const floatingTicketRight = keyframes`
@@ -55,7 +55,7 @@ const floatingTicketRight = keyframes`
   }
   to {
     transform: translate(0, -0px);
-  }  
+  }
 `
 
 const mainTicketAnimation = keyframes`
@@ -67,7 +67,7 @@ const mainTicketAnimation = keyframes`
   }
   to {
     transform: rotate(0deg);
-  }  
+  }
 `
 
 const TicketContainer = styled(Flex)`

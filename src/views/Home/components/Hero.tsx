@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Flex, Heading, Button } from '@pancakeswap/uikit'
+import { Flex, Heading, Button } from '@dfh-finance/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -18,7 +18,7 @@ const flyingAnim = () => keyframes`
   }
   to {
     transform: translate(0, 0px);
-  }  
+  }
 `
 
 const fading = () => keyframes`
@@ -30,7 +30,7 @@ const fading = () => keyframes`
   }
   to {
     opacity: 0.9;
-  }  
+  }
 `
 
 const BgWrapper = styled.div`

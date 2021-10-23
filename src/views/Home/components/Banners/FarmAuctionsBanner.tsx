@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Button, ArrowForwardIcon, Heading } from '@pancakeswap/uikit'
+import { Text, Flex, Button, ArrowForwardIcon, Heading } from '@dfh-finance/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 
@@ -88,7 +88,7 @@ const FarmAuctionsBanner = () => {
     <Wrapper>
       <Inner>
         <LeftWrapper>
-          <StyledSubheading>{t('%num% Contenders...', { num: 46 })}</StyledSubheading>
+          <StyledSubheading>{t('%num% Contenders...', { num: 50 })}</StyledSubheading>
           <StyledHeading scale="xl">{t('%num% Winners', { num: 3 })}</StyledHeading>
           <Link to="/farms/auction">
             <Button>

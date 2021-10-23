@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useModal } from '@pancakeswap/uikit'
+import { useModal } from '@dfh-finance/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { getAnniversaryAchievementContract } from 'utils/contractHelpers'
 import AnniversaryAchievementModal from './AnniversaryAchievementModal'
@@ -26,8 +26,8 @@ const GlobalCheckClaimStatus: React.FC<GlobalCheckClaimStatusProps> = ({ exclude
   useEffect(() => {
     const fetchClaimAnniversaryStatus = async () => {
       const { canClaim } = getAnniversaryAchievementContract()
-      const canClaimAnniversary = await canClaim(account)
-      setCanClaimAnniversaryPoints(canClaimAnniversary)
+      // const canClaimAnniversary = await canClaim(account)
+      // setCanClaimAnniversaryPoints(canClaimAnniversary)
     }
 
     if (account) {

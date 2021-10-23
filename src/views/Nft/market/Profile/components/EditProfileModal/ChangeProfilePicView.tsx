@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Box, InjectedModalProps, Text } from '@pancakeswap/uikit'
+import { Button, Box, InjectedModalProps, Text } from '@dfh-finance/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 import { useProfile } from 'state/profile/hooks'
@@ -67,20 +67,20 @@ const ChangeProfilePicPage: React.FC<ChangeProfilePicPageProps> = ({ onDismiss }
       </Text>
       <Box maxHeight="300px" overflowY="scroll">
         {nftsInWallet.map((walletNft) => {
-          const handleChange = (tokenId: string) => {
+          const handleChange = () => {
             setSelectedNft({
-              tokenId,
+              tokenId: walletNft.tokenId,
               collectionAddress: walletNft.collectionAddress,
             })
           }
           return (
             <SelectionCard
               name="profilePicture"
-              key={walletNft.tokenId}
-              value={selectedNft.tokenId}
+              key={`${walletNft.collectionAddress}#${walletNft.tokenId}`}
+              value={walletNft.tokenId}
               image={walletNft.image.thumbnail}
               isChecked={walletNft.tokenId === selectedNft.tokenId}
-              onChange={() => handleChange(walletNft.tokenId)}
+              onChange={handleChange}
               disabled={isApproving || isConfirming || isConfirmed}
             >
               <Text bold>{walletNft.name}</Text>

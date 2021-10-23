@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, ChevronLeftIcon, Flex } from '@pancakeswap/uikit'
+import { Box, ChevronLeftIcon, Flex } from '@dfh-finance/uikit'
 import { Link as RouterLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
@@ -18,7 +18,7 @@ const TopBar: React.FC = () => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between" mb="24px">
-      <BackLink to={nftsBaseUrl}>
+      <BackLink to={`${nftsBaseUrl}/collections`}>
         <ChevronLeftIcon color="primary" width="24px" />
         {t('All Collections')}
       </BackLink>

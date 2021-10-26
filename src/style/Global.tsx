@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
 import { PancakeTheme } from '@dfh-finance/uikit/dist/theme'
 
@@ -13,7 +13,6 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     background-color: ${({ theme }) => theme.colors.background};
-
     img {
       height: auto;
       max-width: 100%;
@@ -22,3 +21,13 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default GlobalStyle
+
+export const GlobalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/images/background.png');
+  background-size: cover;
+`

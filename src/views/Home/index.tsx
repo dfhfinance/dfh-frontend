@@ -1,139 +1,166 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
-import PageSection from 'components/PageSection'
-import { useWeb3React } from '@web3-react/core'
-import useTheme from 'hooks/useTheme'
-import Container from 'components/Layout/Container'
+import { Button } from '@dfh-finance/uikit'
 import { PageMeta } from 'components/Layout/Page'
-import Hero from './components/Hero'
-import { swapSectionData, earnSectionData, cakeSectionData } from './components/SalesSection/data'
-import MetricsSection from './components/MetricsSection'
-import SalesSection from './components/SalesSection'
-import WinSection from './components/WinSection'
-import FarmsPoolsRow from './components/FarmsPoolsRow'
-import Footer from './components/Footer'
-import CakeDataRow from './components/CakeDataRow'
-import { WedgeTopLeft, InnerWedgeWrapper, OuterWedgeWrapper, WedgeTopRight } from './components/WedgeSvgs'
-import UserBanner from './components/UserBanner'
+import { useTranslation } from '../../contexts/Localization'
+import ConnectWalletButton from '../../components/ConnectWalletButton'
 
-const StyledHeroSection = styled(PageSection)`
-  padding-top: 16px;
+const HomePageContent = styled.div`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: calc(100vh - 57px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding-top: 48px;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    flex-direction: row;
+    left: unset;
+    right: 10vw;
+    transform: none;
   }
 `
 
-const UserBannerWrapper = styled(Container)`
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  padding-left: 0px;
-  padding-right: 0px;
+const TypographySection = styled.div`
+  order: 1;
+  margin-top: 16px;
+  color: #2d4067;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
+
+  > h1 {
+    font-size: 24px;
+    font-weight: 700;
+
+    ${({ theme }) => theme.mediaQueries.xs} {
+      font-size: 28px;
+    }
+
+    ${({ theme }) => theme.mediaQueries.sm} {
+      font-size: 36px;
+    }
+  }
+
+  > p {
+    font-size: 18px;
+    color: #2d4067;
+    font-weight: 400;
+    margin-top: 8px;
+    max-width: 35ch;
+
+    ${({ theme }) => theme.mediaQueries.xs} {
+      font-size: 20px;
+    }
+
+    ${({ theme }) => theme.mediaQueries.sm} {
+      font-size: 28px;
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    order: 0;
+  }
+`
+
+const ButtonGrouping = styled.div`
+  display: flex;
+  justify-content: center;
+  width: calc(100vw - 32px);
+  margin-top: 8px;
+
+  > * + * {
+    margin-left: 8px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xs} {
+    margin-top: 32px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-top: 32px;
+  }
+`
+
+const StyledButton = styled(Button)`
+  padding: 0;
+  width: 130px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 160px;
+  }
+`
+
+const StyledConnectWalletButton = styled(ConnectWalletButton)`
+  padding: 0;
+  width: 130px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 160px;
+  }
+`
+
+const HomeAssetSection = styled.div`
+  background-image: url('/images/background-home.png');
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: center top;
+  width: 35vh;
+  height: 55%;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 45vh;
+    height: 70%;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+  }
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    padding-left: 24px;
-    padding-right: 24px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 50vh;
+    height: 100%;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    width: 60vh;
   }
 `
 
 const Home: React.FC = () => {
-  const { theme } = useTheme()
-  const { account } = useWeb3React()
-
-  const HomeSectionContainerStyles = { margin: '0', width: '100%', maxWidth: '968px' }
+  const history = useHistory()
+  const { t } = useTranslation()
 
   return (
     <>
       <PageMeta />
-      <StyledHeroSection
-        innerProps={{ style: { margin: '0', width: '100%' } }}
-        background={
-          theme.isDark
-            ? 'radial-gradient(103.12% 50% at 50% 50%, #21193A 0%, #191326 100%)'
-            : 'linear-gradient(139.73deg, #E6FDFF 0%, #F3EFFF 100%)'
-        }
-        index={2}
-        hasCurvedDivider={false}
-      >
-        {account && (
-          <UserBannerWrapper>
-            <UserBanner />
-          </UserBannerWrapper>
-        )}
-        <Hero />
-      </StyledHeroSection>
-      <PageSection
-        innerProps={{ style: { margin: '0', width: '100%' } }}
-        background={
-          theme.isDark
-            ? 'linear-gradient(180deg, #09070C 22%, #201335 100%)'
-            : 'linear-gradient(180deg, #FFFFFF 22%, #D7CAEC 100%)'
-        }
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <MetricsSection />
-      </PageSection>
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background={theme.colors.background}
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <OuterWedgeWrapper>
-          <InnerWedgeWrapper top fill={theme.isDark ? '#201335' : '#D8CBED'}>
-            <WedgeTopLeft />
-          </InnerWedgeWrapper>
-        </OuterWedgeWrapper>
-        <SalesSection {...swapSectionData} />
-      </PageSection>
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background={theme.colors.gradients.cardHeader}
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <OuterWedgeWrapper>
-          <InnerWedgeWrapper width="150%" top fill={theme.colors.background}>
-            <WedgeTopRight />
-          </InnerWedgeWrapper>
-        </OuterWedgeWrapper>
-        <SalesSection {...earnSectionData} />
-        <FarmsPoolsRow />
-      </PageSection>
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background={
-          theme.isDark
-            ? 'linear-gradient(180deg, #0B4576 0%, #091115 100%)'
-            : 'linear-gradient(180deg, #6FB6F1 0%, #EAF2F6 100%)'
-        }
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <WinSection />
-      </PageSection>
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background={theme.colors.background}
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <SalesSection {...cakeSectionData} />
-        <CakeDataRow />
-      </PageSection>
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background="linear-gradient(180deg, #7645D9 0%, #5121B1 100%)"
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <Footer />
-      </PageSection>
+      <HomePageContent>
+        <TypographySection>
+          <h1>{t('Stake to Earn.')}</h1>
+          <p>{t('Trade, stake and earn cryptocurrency on the most popular decentralized platform.')}</p>
+          <ButtonGrouping>
+            <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>
+            <StyledButton
+              variant="secondary"
+              style={{ color: '#2D4067', borderColor: '#2D4067' }}
+              onClick={() => {
+                history.push('/swap')
+              }}
+            >
+              {t('Trade Now')}
+            </StyledButton>
+          </ButtonGrouping>
+        </TypographySection>
+        <HomeAssetSection />
+      </HomePageContent>
     </>
   )
 }

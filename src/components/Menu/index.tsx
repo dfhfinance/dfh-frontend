@@ -1,15 +1,14 @@
-import React from 'react'
-import { useLocation } from 'react-router'
 import { Menu as UikitMenu } from '@dfh-finance/uikit'
 import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
+import React from 'react'
+import { useLocation } from 'react-router'
 import { usePriceCakeBusd } from 'state/farms/hooks'
 import config from './config/config'
-import UserMenu from './UserMenu'
-import GlobalSettings from './GlobalSettings'
-import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { footerLinks } from './config/footerConfig'
+import UserMenu from './UserMenu'
+import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
@@ -23,7 +22,7 @@ const Menu = (props) => {
   return (
     <UikitMenu
       userMenu={<UserMenu />}
-      globalMenu={<GlobalSettings />}
+      globalMenu={null}
       isDark={isDark}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}

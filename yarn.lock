@@ -1549,10 +1549,10 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@dfh-finance/uikit@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@dfh-finance/uikit/-/uikit-0.1.5.tgz#0020f69db699fcd3c49c6aab0e3d20e3e8d18547"
-  integrity sha512-nQs8cr3c7N0uMK8mzmzxRAbjy+XEC5CdSTH7OuhmuT/xlIw89ruDxxfqyryxKVWP9uK/hKlLxPvwYpUqibOuKA==
+"@dfh-finance/uikit@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@dfh-finance/uikit/-/uikit-0.1.6.tgz#a1061dccffdd22454d9b4647ab51e4c8a57726bb"
+  integrity sha512-vKGoayH+2XitcwMpafDupVFu3l7j7adwo8DOwodMZjVho7zW8d85wpjF62nNH49X/JoXN/lL/c5BuDcmqAhvvA==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"

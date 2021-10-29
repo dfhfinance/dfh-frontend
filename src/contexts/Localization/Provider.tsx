@@ -32,9 +32,9 @@ export const LanguageProvider: React.FC = ({ children }) => {
       const codeFromStorage = getLanguageCodeFromLS()
 
       if (codeFromStorage !== VI.locale) {
-        const enLocale = languageMap.get(VI.locale)
+        const viLocale = languageMap.get(VI.locale)
         const currentLocale = await fetchLocale(codeFromStorage)
-        languageMap.set(codeFromStorage, { ...enLocale, ...currentLocale })
+        languageMap.set(codeFromStorage, { ...viLocale, ...currentLocale })
       }
 
       setState((prevState) => ({

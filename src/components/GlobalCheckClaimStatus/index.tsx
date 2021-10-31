@@ -26,8 +26,8 @@ const GlobalCheckClaimStatus: React.FC<GlobalCheckClaimStatusProps> = ({ exclude
   useEffect(() => {
     const fetchClaimAnniversaryStatus = async () => {
       const { canClaim } = getAnniversaryAchievementContract()
-      const canClaimAnniversary = await canClaim(account)
-      setCanClaimAnniversaryPoints(canClaimAnniversary)
+      // const canClaimAnniversary = await canClaim(account)
+      // setCanClaimAnniversaryPoints(canClaimAnniversary)
     }
 
     if (account) {

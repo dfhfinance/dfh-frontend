@@ -22,6 +22,22 @@ export const mainnetTokens = {
     'https://www.binance.com/',
   ),
   // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
+  dfh: new Token(
+    MAINNET,
+    '0xfbD3790C36b3A3e010A0C9aC9459806DE3794E82',
+    18,
+    'DFH',
+    'DFH Finance',
+    'https://google.com/',
+  ),
+  milk: new Token(
+    MAINNET,
+    '0x26aB5131DD666B4179aC909926ee3C18eE05E470',
+    18,
+    'MILK',
+    'MilkSwap Token',
+    'https://milkswap.app/',
+  ),
   bnb: new Token(MAINNET, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'BNB', 'BNB', 'https://www.binance.com/'),
   cake: new Token(
     MAINNET,
@@ -1690,11 +1706,19 @@ export const mainnetTokens = {
 export const testnetTokens = {
   wbnb: new Token(
     TESTNET,
-    '0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F',
+    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     18,
     'WBNB',
     'Wrapped BNB',
     'https://www.binance.com/',
+  ),
+  dfh: new Token(
+    TESTNET,
+    '0x230e23f0744fE767aa628Fcbb6F079087DF23C1C',
+    18,
+    'DFH',
+    'DFH Finance',
+    'https://google.com/',
   ),
   cake: new Token(
     TESTNET,

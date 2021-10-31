@@ -6,6 +6,8 @@ const options = {
   gasLimit: DEFAULT_GAS_LIMIT,
 }
 
+// TODO---THANHNV: comment enterStaking, leaveStaking do chưa support stake đồng Cake
+
 export const stakeFarm = async (masterChefContract, pid, amount) => {
   const gasPrice = getGasPrice()
   const value = new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString()

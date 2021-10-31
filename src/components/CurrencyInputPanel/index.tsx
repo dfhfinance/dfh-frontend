@@ -1,7 +1,7 @@
 import React from 'react'
 import { Currency, Pair } from '@pancakeswap/sdk'
 import { Button, ChevronDownIcon, Text, useModal, Flex } from '@dfh-finance/uikit'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -78,6 +78,7 @@ export default function CurrencyInputPanel({
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const { t } = useTranslation()
   const translatedLabel = label || t('Input')
+  const theme = useTheme()
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal
@@ -93,9 +94,16 @@ export default function CurrencyInputPanel({
         {!hideInput && (
           <LabelRow>
             <RowBetween>
-              <Text fontSize="14px">{translatedLabel}</Text>
+              <Text fontSize="14px" color={theme.colors.textBlack}>
+                {translatedLabel}
+              </Text>
               {account && (
-                <Text onClick={onMax} fontSize="14px" style={{ display: 'inline', cursor: 'pointer' }}>
+                <Text
+                  onClick={onMax}
+                  fontSize="14px"
+                  color={theme.colors.textBlack}
+                  style={{ display: 'inline', cursor: 'pointer' }}
+                >
                   {!hideBalance && !!currency
                     ? t('Balance: %balance%', { balance: selectedCurrencyBalance?.toSignificant(6) ?? t('Loading') })
                     : ' -'}
@@ -137,11 +145,11 @@ export default function CurrencyInputPanel({
                 <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
               ) : null}
               {pair ? (
-                <Text id="pair">
+                <Text id="pair" color={theme.colors.textBlack}>
                   {pair?.token0.symbol}:{pair?.token1.symbol}
                 </Text>
               ) : (
-                <Text id="pair">
+                <Text id="pair" color={theme.colors.textBlack}>
                   {(currency && currency.symbol && currency.symbol.length > 20
                     ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
                         currency.symbol.length - 5,
@@ -150,7 +158,7 @@ export default function CurrencyInputPanel({
                     : currency?.symbol) || t('Select a currency')}
                 </Text>
               )}
-              {!disableCurrencySelect && <ChevronDownIcon />}
+              {!disableCurrencySelect && <ChevronDownIcon color={theme.colors.textBlack} />}
             </Flex>
           </CurrencySelectButton>
         </InputRow>

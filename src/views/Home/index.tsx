@@ -5,6 +5,7 @@ import { Button } from '@dfh-finance/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import { useTranslation } from '../../contexts/Localization'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 
 const HomePageContent = styled.div`
   position: absolute;
@@ -138,6 +139,7 @@ const HomeAssetSection = styled.div`
 const Home: React.FC = () => {
   const history = useHistory()
   const { t } = useTranslation()
+  const { account } = useActiveWeb3React()
 
   return (
     <>
@@ -147,7 +149,7 @@ const Home: React.FC = () => {
           <h1>{t('Stake to Earn.')}</h1>
           <p>{t('Trade, stake and earn cryptocurrency on the most popular decentralized platform.')}</p>
           <ButtonGrouping>
-            <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>
+            {!account && <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>}
             <StyledButton
               variant="secondary"
               style={{ color: '#2D4067', borderColor: '#2D4067' }}

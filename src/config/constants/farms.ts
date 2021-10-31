@@ -12,9 +12,9 @@ const farms: SerializedFarmConfig[] = [
    */
   {
     pid: 0,
-    lpSymbol: 'CAKE',
+    lpSymbol: 'DFH',
     lpAddresses: {
-      97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
+      97: '0x230e23f0744fE767aa628Fcbb6F079087DF23C1C',
       56: '0x26aB5131DD666B4179aC909926ee3C18eE05E470',
     },
     token: serializedTokens.syrup,
@@ -22,19 +22,19 @@ const farms: SerializedFarmConfig[] = [
   },
   {
     pid: 1,
-    lpSymbol: 'CAKE-BNB LP',
+    lpSymbol: 'DFH-BNB LP',
     lpAddresses: {
-      97: '0x3ed8936cAFDF85cfDBa29Fbe5940A5b0524824F4',
+      97: '0x73936d5F1EA5dC0bc1a0143b8d987f83A6cacC04',
       56: '0xDAC965EcF6f44C95e1934Ce311438C3eFF2a17e6',
     },
-    token: serializedTokens.milk,
+    token: serializedTokens.dfh,
     quoteToken: serializedTokens.wbnb,
   },
   {
-    pid: 4,
+    pid: 2,
     lpSymbol: 'BUSD-BNB LP',
     lpAddresses: {
-      97: '',
+      97: '0xb51e4d3F60c8453AdCa52797F9FA1481A6E13A7A',
       56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
     },
     token: serializedTokens.busd,

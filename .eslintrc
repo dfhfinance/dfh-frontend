@@ -13,7 +13,8 @@
   },
   "extends": "@dfh-finance/eslint-config-pancake",
   "rules": {
-    "no-console": ["warn", { "allow": ["info", "warn", "error", "debug"] }],
+    "no-console": ["warn", { "allow": ["log", "info", "warn", "error", "debug"] }],
+    "@typescript-eslint/no-unused-vars": 0,
     "no-plusplus": 0,
     "prefer-destructuring": ["warn", { "object": true, "array": false }],
     "no-underscore-dangle": 0,

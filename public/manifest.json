@@ -1,12 +1,12 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
-  "homepage_url": "https://pancakeswap.finance",
+  "short_name": "DFH Finance",
+  "name": "DFH Finance",
+  "description": "DFH Finance",
+  "homepage_url": "https://dfh.finance",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#1FC7D4",
-  "background_color": "#ffffff",
+  "theme_color": "#7186A7",
+  "background_color": "#7186A7",
   "orientation": "portrait",
   "icons": [
     {

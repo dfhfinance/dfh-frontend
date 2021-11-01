@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Percent, Token } from '@pancakeswap/sdk'
+import { ChainId, JSBI, Percent, Token } from '@dfh-finance/sdk'
 import { mainnetTokens, testnetTokens } from './tokens'
 
 // Pancakeswap mainnet

@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@dfh-finance/sdk'
 import { Button, Text, CheckmarkCircleIcon } from '@dfh-finance/uikit'
 import { AutoRow, RowFixed } from 'components/Layout/Row'
 import { AutoColumn } from 'components/Layout/Column'

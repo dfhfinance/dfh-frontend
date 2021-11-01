@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { Price } from '@pancakeswap/sdk'
+import { Price } from '@dfh-finance/sdk'
 import { Text, AutoRenewIcon } from '@dfh-finance/uikit'
 import { StyledBalanceMaxMini } from './styleds'
 

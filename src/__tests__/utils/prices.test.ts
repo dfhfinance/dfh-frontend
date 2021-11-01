@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Pair, Route, Token, TokenAmount, Trade, TradeType } from '@pancakeswap/sdk'
+import { ChainId, JSBI, Pair, Route, Token, TokenAmount, Trade, TradeType } from '@dfh-finance/sdk'
 import { computeTradePriceBreakdown } from 'utils/prices'
 
 describe('prices', () => {

@@ -1,5 +1,5 @@
 import React, { useRef, RefObject, useCallback, useState, useMemo } from 'react'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@dfh-finance/sdk'
 import { Text, Button, CloseIcon, IconButton, LinkExternal, Input, Link } from '@dfh-finance/uikit'
 import styled from 'styled-components'
 import Row, { RowBetween, RowFixed } from 'components/Layout/Row'

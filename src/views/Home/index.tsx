@@ -12,10 +12,14 @@ const HomePageContent = styled.div`
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  height: calc(100vh - 57px);
+  height: calc(100vh - 56px - 66px);
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: calc(100vh - 56px);
+  }
 
   ${({ theme }) => theme.mediaQueries.xl} {
     flex-direction: row;
@@ -81,7 +85,7 @@ const ButtonGrouping = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.xs} {
-    margin-top: 32px;
+    margin-top: 16px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {

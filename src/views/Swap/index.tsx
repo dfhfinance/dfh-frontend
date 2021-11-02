@@ -8,7 +8,6 @@ import { RouteComponentProps } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import SwapWarningTokens from 'config/constants/swapWarningTokens'
 import AddressInputPanel from './components/AddressInputPanel'
-import { GreyCard } from '../../components/Card'
 import Column, { AutoColumn } from '../../components/Layout/Column'
 import ConfirmSwapModal from './components/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -397,16 +396,15 @@ export default function Swap({ history }: RouteComponentProps) {
                   (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
               </Button>
             ) : noRoute && userHasSpecifiedInputOutput ? (
-              <GreyCard style={{ textAlign: 'center' }}>
-                <Text color="textSubtle" mb="4px">
-                  {t('Insufficient liquidity for this trade.')}
-                </Text>
+              <Button width="100%" disabled>
+                {t('Insufficient liquidity for this trade.')}
                 {singleHopOnly && (
-                  <Text color="textSubtle" mb="4px">
+                  <>
+                    <br />
                     {t('Try enabling multi-hop trades.')}
-                  </Text>
+                  </>
                 )}
-              </GreyCard>
+              </Button>
             ) : showApproveFlow ? (
               <RowBetween>
                 <Button

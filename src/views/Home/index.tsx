@@ -114,6 +114,22 @@ const HomeAssetSection = styled.div`
   background-position: center top;
   width: 35vh;
   height: 55%;
+  animation: fadein 2.5s;
+
+  @keyframes fadein {
+    0% {
+      margin-top: -2000px;
+    }
+    70% {
+      margin-top: 0;
+    }
+    80% {
+      margin-top: -50px;
+    }
+    100% {
+      margin-top: 0;
+    }
+  }
 
   ${({ theme }) => theme.mediaQueries.sm} {
     width: 45vh;
@@ -146,8 +162,8 @@ const Home: React.FC = () => {
       <PageMeta />
       <HomePageContent>
         <TypographySection>
-          <h1>{t('Stake to Earn.')}</h1>
-          <p>{t('Trade, stake and earn cryptocurrency on the most popular decentralized platform.')}</p>
+          <h1>{t('DFH Finance')}</h1>
+          <p>{t('The digitization and sharing platform for investment in the real estate industry')}</p>
           <ButtonGrouping>
             {!account && <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>}
             <StyledButton

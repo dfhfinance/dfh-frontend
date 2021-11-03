@@ -32,7 +32,7 @@ const HomePageContent = styled.div`
 const TypographySection = styled.div`
   order: 1;
   margin-top: 16px;
-  color: #2d4067;
+  color: #d8c172;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -55,7 +55,7 @@ const TypographySection = styled.div`
 
   > p {
     font-size: 18px;
-    color: #2d4067;
+    color: #d8c172;
     font-weight: 400;
     margin-top: 8px;
     max-width: 35ch;
@@ -172,7 +172,7 @@ const Home: React.FC = () => {
             {!account && <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>}
             <StyledButton
               variant="secondary"
-              style={{ color: '#2D4067', borderColor: '#2D4067' }}
+              style={{ color: '#D8C172', borderColor: '#D8C172' }}
               onClick={() => {
                 history.push('/swap')
               }}

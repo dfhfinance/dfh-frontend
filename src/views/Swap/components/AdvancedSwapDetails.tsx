@@ -97,7 +97,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
             <>
               <RowBetween style={{ padding: '0 16px' }}>
                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                  <Text fontSize="14px" color="textSubtle">
+                  <Text fontSize="14px" color="textSubtle" width="max-content">
                     {t('Route')}
                   </Text>
                   <QuestionHelper

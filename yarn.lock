@@ -1562,10 +1562,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@dfh-finance/uikit@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@dfh-finance/uikit/-/uikit-0.1.9.tgz#72f105065081ceafb05923fcdd7d70f5315785d1"
-  integrity sha512-XkE9JR/Q1Ao3Pew8WhhdmRg0Y7u5zbXu6LOvQ4xHjG2lDnmUlfJ8jKLwSPa9kOfeb57g+YwZNwCvGgOg/PS4Qw==
+"@dfh-finance/uikit@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@dfh-finance/uikit/-/uikit-0.1.10.tgz#d3471c4dbd869e2b179b548f3a7a9cfaadbe0778"
+  integrity sha512-r6D707eruBn2UQ99hewKSFuY+WnMpaIaCmQn0xpyjf90IVGI37/VyjJLnUS+uMsYQidcfKNljs/LWleZMGa2+Q==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"

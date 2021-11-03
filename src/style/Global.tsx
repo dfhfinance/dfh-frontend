@@ -30,4 +30,5 @@ export const GlobalBackground = styled.div`
   height: 100vh;
   background-image: url('/images/background.png');
   background-size: cover;
+  background-position: center;
 `

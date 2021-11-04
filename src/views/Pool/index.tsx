@@ -12,6 +12,7 @@ import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks
 import Dots from '../../components/Loader/Dots'
 import { AppHeader, AppBody } from '../../components/App'
 import Page from '../Page'
+import SwapLiquidityTabToggle from '../../components/SwapLiquidityTabToggle'
 
 const Body = styled(CardBody)`
   background-color: ${({ theme }) => theme.colors.dropdownDeep};
@@ -84,6 +85,7 @@ export default function Pool() {
 
   return (
     <Page>
+      <SwapLiquidityTabToggle />
       <AppBody>
         <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} />
         <Body>

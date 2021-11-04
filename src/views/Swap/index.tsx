@@ -40,6 +40,7 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import Page from '../Page'
 import SwapWarningModal from './components/SwapWarningModal'
+import SwapLiquidityTabToggle from '../../components/SwapLiquidityTabToggle'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -301,6 +302,7 @@ export default function Swap({ history }: RouteComponentProps) {
 
   return (
     <Page>
+      <SwapLiquidityTabToggle />
       <AppBody>
         <AppHeader title={t('Exchange')} subtitle={t('Trade tokens in an instant')} />
         <Wrapper id="swap-page">

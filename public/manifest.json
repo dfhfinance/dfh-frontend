@@ -5,8 +5,8 @@
   "homepage_url": "https://dfh.finance",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#7186A7",
-  "background_color": "#7186A7",
+  "theme_color": "#222222",
+  "background_color": "#222222",
   "orientation": "portrait",
   "icons": [
     {

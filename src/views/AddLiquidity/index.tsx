@@ -38,6 +38,7 @@ import ConfirmAddModalBottom from './ConfirmAddModalBottom'
 import { currencyId } from '../../utils/currencyId'
 import PoolPriceBar from './PoolPriceBar'
 import Page from '../Page'
+import SwapLiquidityTabToggle from '../../components/SwapLiquidityTabToggle'
 
 export default function AddLiquidity({
   match: {
@@ -317,6 +318,7 @@ export default function AddLiquidity({
 
   return (
     <Page>
+      <SwapLiquidityTabToggle />
       <AppBody>
         <AppHeader
           title={t('Add Liquidity')}

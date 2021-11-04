@@ -18,6 +18,7 @@ import { currencyId } from '../../utils/currencyId'
 import Dots from '../../components/Loader/Dots'
 import { AppHeader, AppBody } from '../../components/App'
 import Page from '../Page'
+import SwapLiquidityTabToggle from '../../components/SwapLiquidityTabToggle'
 
 enum Fields {
   TOKEN0 = 0,
@@ -91,6 +92,7 @@ export default function PoolFinder() {
 
   return (
     <Page>
+      <SwapLiquidityTabToggle />
       <AppBody>
         <AppHeader title={t('Import Pool')} subtitle={t('Import an existing pool')} backTo="/pool" />
         <AutoColumn style={{ padding: '1rem' }} gap="md">

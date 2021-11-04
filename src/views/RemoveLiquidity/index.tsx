@@ -37,6 +37,7 @@ import { useBurnActionHandlers, useDerivedBurnInfo, useBurnState } from '../../s
 import { Field } from '../../state/burn/actions'
 import { useGasPrice, useUserSlippageTolerance } from '../../state/user/hooks'
 import Page from '../Page'
+import SwapLiquidityTabToggle from '../../components/SwapLiquidityTabToggle'
 
 const BorderCard = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -176,6 +177,7 @@ export default function RemoveLiquidity({
 
   // tx sending
   const addTransaction = useTransactionAdder()
+
   async function onRemove() {
     if (!chainId || !library || !account || !deadline) throw new Error('missing dependencies')
     const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
@@ -454,6 +456,7 @@ export default function RemoveLiquidity({
 
   return (
     <Page>
+      <SwapLiquidityTabToggle />
       <AppBody>
         <AppHeader
           backTo="/pool"

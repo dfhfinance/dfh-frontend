@@ -3,7 +3,8 @@ import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
   title: 'DFH Finance',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, soluta!',
+  description:
+    'DFH Finance là nền tảng số hóa và chia sẽ cơ hội đầu tư vào ngành bất động sản tại các thành phố lớn và ở khắp các tỉnh thành tại Việt Nam.',
   image: '/images/hero.png',
 }
 

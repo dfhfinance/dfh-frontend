@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { ChainId, Currency, Token } from '@dfh-finance/sdk'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import {
   Button,
   Text,
@@ -10,7 +10,6 @@ import {
   Flex,
   Box,
   Link,
-  Spinner,
   Modal,
   InjectedModalProps,
 } from '@dfh-finance/uikit'
@@ -18,9 +17,9 @@ import { registerToken } from 'utils/wallet'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
-import { RowFixed } from '../Layout/Row'
-import { AutoColumn, ColumnCenter } from '../Layout/Column'
-import { getBscScanLink } from '../../utils'
+import { getBscScanLink } from 'utils'
+import { RowFixed } from 'components/Layout/Row'
+import { AutoColumn, ColumnCenter } from 'components/Layout/Column'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,7 +29,36 @@ const Section = styled(AutoColumn)`
 `
 
 const ConfirmedIcon = styled(ColumnCenter)`
-  padding: 24px 0;
+  margin: 24px 0;
+  min-height: 128px;
+  position: relative;
+`
+
+const fall = keyframes`
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -50px;
+  }
+  75% {
+    top: -30px;
+  }
+  90% {
+    top: -10px;
+  }
+  100% {
+    top: 0;
+  }
+`
+
+const MySpinner = styled.div`
+  background-image: url('/logo.png');
+  background-size: 128px;
+  width: 128px;
+  height: 128px;
+  animation: ${fall} 1.5s linear infinite;
+  position: absolute;
 `
 
 function ConfirmationPendingContent({ pendingText }: { pendingText: string }) {
@@ -38,7 +66,7 @@ function ConfirmationPendingContent({ pendingText }: { pendingText: string }) {
   return (
     <Wrapper>
       <ConfirmedIcon>
-        <Spinner />
+        <MySpinner />
       </ConfirmedIcon>
       <AutoColumn gap="12px" justify="center">
         <Text fontSize="20px">{t('Waiting For Confirmation')}</Text>

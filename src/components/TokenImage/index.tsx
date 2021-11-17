@@ -5,7 +5,7 @@ import {
   TokenImage as UIKitTokenImage,
   ImageProps,
 } from '@dfh-finance/uikit'
-import tokens from 'config/constants/tokens'
+import tokens, { mainnetTokens, testnetTokens } from 'config/constants/tokens'
 import { Token } from '@dfh-finance/sdk'
 
 interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc' | 'secondarySrc'> {
@@ -18,14 +18,14 @@ const getImageUrlFromToken = (token: Token) => {
   return `/images/tokens/${address}.svg`
 }
 
+const isDfh = (token: Token) => {
+  return token.equals(testnetTokens.dfh) || token.equals(mainnetTokens.dfh)
+}
+
 export const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken, ...props }) => {
-  return (
-    <UIKitTokenPairImage
-      primarySrc={getImageUrlFromToken(primaryToken)}
-      secondarySrc={getImageUrlFromToken(secondaryToken)}
-      {...props}
-    />
-  )
+  const primarySrc = isDfh(primaryToken) ? '/logo.png' : getImageUrlFromToken(primaryToken)
+  const secondarySrc = isDfh(secondaryToken) ? '/logo.png' : getImageUrlFromToken(secondaryToken)
+  return <UIKitTokenPairImage primarySrc={primarySrc} secondarySrc={secondarySrc} {...props} />
 }
 
 interface TokenImageProps extends ImageProps {

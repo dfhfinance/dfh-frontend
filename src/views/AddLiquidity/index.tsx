@@ -356,7 +356,7 @@ export default function AddLiquidity({
               showCommonBases
             />
             <ColumnCenter>
-              <AddIcon width="16px" />
+              <AddIcon width="16px" color="secondary" />
             </ColumnCenter>
             <CurrencyInputPanel
               value={formattedAmounts[Field.CURRENCY_B]}

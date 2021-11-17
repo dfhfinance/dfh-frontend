@@ -475,7 +475,7 @@ export default function RemoveLiquidity({
           <AutoColumn gap="20px">
             <RowBetween>
               <Text>{t('Amount')}</Text>
-              <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
+              <Button variant="text2" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
                 {showDetailed ? t('Simple') : t('Detailed')}
               </Button>
             </RowBetween>

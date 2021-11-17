@@ -4,7 +4,7 @@ import { Button, ChevronDownIcon, Text, useModal, Flex } from '@dfh-finance/uiki
 import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import { CurrencyLogo, DoubleCurrencyLogo } from '../Logo'
 
@@ -123,7 +123,7 @@ export default function CurrencyInputPanel({
                 }}
               />
               {account && currency && showMaxButton && label !== 'To' && (
-                <Button onClick={onMax} scale="sm" variant="text">
+                <Button onClick={onMax} scale="sm" variant="text2">
                   MAX
                 </Button>
               )}

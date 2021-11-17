@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const StyledInternalLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.secondary};
   font-weight: 500;
 
   :hover {

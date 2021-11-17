@@ -13,7 +13,7 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 
   transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
-  transition: transform 300ms ease-in-out;
+  transition: transform 300ms ease;
 `
 
 export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedSwapDetailsProps) {

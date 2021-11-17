@@ -245,8 +245,8 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
               <Button
                 as={Link}
                 to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}
-                variant="text"
-                startIcon={<AddIcon color="primary" />}
+                variant="text2"
+                startIcon={<AddIcon color="secondary" />}
                 width="100%"
               >
                 Add liquidity instead

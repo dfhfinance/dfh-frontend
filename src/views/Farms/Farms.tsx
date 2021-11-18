@@ -370,6 +370,7 @@ const Farms: React.FC = () => {
   return (
     <>
       <Page>
+        <h1>nhdz</h1>
         <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
@@ -380,7 +381,7 @@ const Farms: React.FC = () => {
                 onChange={() => setStakedOnly(!stakedOnly)}
                 scale="sm"
               />
-              <Text> {t('Staked only')}</Text>
+              <Text color="white"> {t('Staked only')}</Text>
             </ToggleWrapper>
             <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
           </ViewControls>

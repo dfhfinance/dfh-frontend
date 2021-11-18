@@ -5,23 +5,22 @@ import { ethers } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, Flex, Image, Text } from '@dfh-finance/uikit'
+import { Flex, Image, Text } from '@dfh-finance/uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import {
-  useFetchPublicPoolsData,
-  usePools,
-  useFetchUserPools,
-  useFetchCakeVault,
   useCakeVault,
+  useFetchCakeVault,
+  useFetchPublicPoolsData,
+  useFetchUserPools,
+  usePools,
 } from 'state/pools/hooks'
 import { usePollFarmsPublicData } from 'state/farms/hooks'
 import { latinise } from 'utils/latinise'
 import FlexLayout from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
-import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { DeserializedPool } from 'state/types'
@@ -31,8 +30,6 @@ import Loading from 'components/Loading'
 import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
-import BountyCard from './components/BountyCard'
-import HelpButton from './components/HelpButton'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import { getAprData, getCakeVaultEarnings } from './helpers'
 
@@ -253,25 +250,6 @@ const Pools: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
-        <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
-          <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Syrup Pools')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('Just stake some tokens to earn.')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
-            </Heading>
-          </Flex>
-          <Flex flex="1" height="fit-content" justifyContent="center" alignItems="center" mt={['24px', null, '0']}>
-            <HelpButton />
-            <BountyCard />
-          </Flex>
-        </Flex>
-      </PageHeader>
       <Page>
         <PoolControls>
           <PoolTabButtons

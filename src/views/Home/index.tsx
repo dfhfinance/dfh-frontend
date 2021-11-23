@@ -170,6 +170,16 @@ const Home: React.FC = () => {
           <p>{t('The digitization and sharing platform for investment in the real estate industry')}</p>
           <ButtonGrouping>
             {!account && <StyledConnectWalletButton variant="primary">{t('Connect Wallet')}</StyledConnectWalletButton>}
+            {account && (
+              <StyledButton
+                variant="primary"
+                onClick={() => {
+                  history.push('/pools')
+                }}
+              >
+                {t('Góp cổ phần')}
+              </StyledButton>
+            )}
             <StyledButton
               variant="secondary"
               style={{ color: '#D8C172', borderColor: '#D8C172' }}

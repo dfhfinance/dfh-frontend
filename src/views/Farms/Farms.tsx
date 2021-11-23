@@ -370,7 +370,6 @@ const Farms: React.FC = () => {
   return (
     <>
       <Page>
-        <h1>nhdz</h1>
         <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />

@@ -28,7 +28,7 @@ interface FarmCardActionsProps {
   lpLabel?: string
 }
 
-const IconButtonWrapper = styled.div`
+export const IconButtonWrapper = styled.div`
   display: flex;
   svg {
     width: 20px;

@@ -30,7 +30,7 @@ const FarmCardInnerContainer = styled(Flex)`
   padding: 24px;
 `
 
-const ExpandingWrapper = styled.div`
+export const ExpandingWrapper = styled.div`
   padding: 24px;
   border-top: 2px solid ${({ theme }) => theme.colors.cardBorder};
   overflow: hidden;
@@ -69,7 +69,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
     <StyledCard isActive={isPromotedFarm}>
       <FarmCardInnerContainer>
         <CardHeading
-          lpLabel={lpLabel}
+          lpLabel={lpLabel.split(' ')[0]}
           multiplier={farm.multiplier}
           isCommunityFarm={farm.isCommunity}
           token={farm.token}

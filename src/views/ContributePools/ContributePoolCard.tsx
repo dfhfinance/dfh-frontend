@@ -8,7 +8,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { IconButtonWrapper } from 'views/Farms/components/FarmCard/StakeAction'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
-import { PoolInfo } from 'views/RealEstatePools'
+import { PoolInfo } from 'views/ContributePools'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 
 const StyledCard = styled(Card)`
@@ -37,7 +37,7 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
   )
 }
 
-export default function RealEstateCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
+export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const multiplier = 10

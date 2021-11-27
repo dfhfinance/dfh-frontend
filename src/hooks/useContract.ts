@@ -30,7 +30,7 @@ import {
   getNftSaleContract,
   getPancakeSquadContract,
   getErc721CollectionContract,
-  getRealEstateContract,
+  getContributePoolContract,
 } from 'utils/contractHelpers'
 import { getMulticallAddress } from 'utils/addressHelpers'
 
@@ -268,7 +268,7 @@ export function useMulticallContract(): Contract | null {
   return useContract(getMulticallAddress(), multiCallAbi, false)
 }
 
-export function useRealEstateContract() {
+export function useContributePoolContract() {
   const { account, library } = useActiveWeb3React()
-  return useMemo(() => getRealEstateContract(account ? library.getSigner(account) : library), [library, account])
+  return useMemo(() => getContributePoolContract(account ? library.getSigner(account) : library), [library, account])
 }

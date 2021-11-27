@@ -1,7 +1,7 @@
 import { Box, Button, Card, Flex, Slider, Text, useModal } from '@dfh-finance/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { mainnetTokens, testnetTokens } from 'config/constants/tokens'
+import { testnetTokens } from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useEffect, useRef, useState } from 'react'
@@ -18,7 +18,7 @@ import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
 import useClaimProfit from 'views/ContributePools/hooks/useClaimProfit'
 import useStakePool from 'views/ContributePools/hooks/useStakePool'
 import StakeModal from 'views/ContributePools/StakeModal'
-import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 
 const StyledCard = styled(Card)`
@@ -125,11 +125,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const isClaimButtonDisabled = Date.now() < endCampaignTimestamp || status === 0
   const isStakeButtonDisabled = Date.now() > endCampaignTimestamp || status !== 0 || totalStaked.gte(totalStakeMax)
 
-  const tokenBalance = useTokenBalance(contributedTokenAddress)
-  const bnbBalance = useGetBnbBalance()
-  const isContributedTokenBnb =
-    contributedTokenAddress === mainnetTokens.wbnb.address || contributedTokenAddress === testnetTokens.wbnb.address
-  const contributedTokenBalance = isContributedTokenBnb ? ethersToBigNumber(bnbBalance.balance) : tokenBalance.balance
+  const contributedTokenBalance = useTokenBalance(contributedTokenAddress).balance
 
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
   const formattedStakeTimeRemaining = toHHMMSS(stakeTimeRemaining)

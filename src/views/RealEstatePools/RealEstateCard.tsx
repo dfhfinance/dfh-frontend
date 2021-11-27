@@ -8,6 +8,8 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { IconButtonWrapper } from 'views/Farms/components/FarmCard/StakeAction'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
+import { PoolInfo } from 'views/RealEstatePools'
+import { getFullDisplayBalance } from 'utils/formatBalance'
 
 const StyledCard = styled(Card)`
   width: 550px;
@@ -35,10 +37,9 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
   )
 }
 
-const RealEstateCard: React.FC = () => {
+export default function RealEstateCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const code = 1001
   const multiplier = 10
   const isConnected = true
   const isApproved = true
@@ -53,12 +54,12 @@ const RealEstateCard: React.FC = () => {
     <StyledCard>
       <Box p="24px">
         <CardHeading
-          lpLabel={`MS: ${code}`}
+          lpLabel={`MS: ${id}`}
           token={testnetTokens.dfh}
           quoteToken={testnetTokens.dfh}
           multiplier={`${multiplier}X`}
         />
-        <Row field="Giá Đầu Vào:" value="300,000 USDT (≈ 6.8 tỉ VND)" />
+        <Row field="Giá Đầu Vào:" value={poolInfo.expectInput.toString()} />
         <Row field="Giá Đầu Ra:" value="330,000 USDT (≈ 7.5 tỉ VND)" />
         <Row field="Lợi nhuận kì vọng:" value="10%" />
         <Row field="Tổng Vốn Huy Động:" value="35,000 USDT (≈ 800 triệu VND)" />
@@ -133,5 +134,3 @@ const RealEstateCard: React.FC = () => {
     </StyledCard>
   )
 }
-
-export default RealEstateCard

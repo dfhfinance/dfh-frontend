@@ -3,7 +3,6 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { testnetTokens } from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
-import { useToken } from 'hooks/Tokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -11,10 +10,12 @@ import { ethersToBigNumber } from 'utils/bigNumber'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import useApprovePool from 'views/ContributePools/hooks/useApprovePool'
 import { PoolInfo } from 'views/ContributePools/useContributedPoolInfos'
+import useContributedToken from 'views/ContributePools/useContributedToken'
 import useProfitUser from 'views/ContributePools/useProfitUser'
 import useUserInfo from 'views/ContributePools/useUserInfo'
 import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
+import useClaimProfit from './hooks/useClaimProfit'
 import useStakePool from './hooks/useStakePool'
 
 const StyledCard = styled(Card)`
@@ -46,6 +47,7 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { isApproved, onApprove } = useApprovePool(poolInfo.contributedToken)
   const onStake = useStakePool()
+  const onClaim = useClaimProfit()
   const { t } = useTranslation()
   const {
     expectInput,
@@ -56,7 +58,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
     // Tổng token đã stake vào pool.
     totalStaked,
   } = poolInfo
-  const contributedToken = useToken(contributedTokenAddress)
+  const contributedToken = useContributedToken(contributedTokenAddress)
   const formattedExpectInput = `${formatNumber(expectInput, 0, 3)} VND`
   const formattedExpectOutput = `${formatNumber(expectOutput, 0, 3)} VND`
   const formattedExpectProfit = `${formatNumber(expectProfit, 0, 3)} VND`
@@ -93,21 +95,15 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       : 0
   const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const multiplier = 10 // TODO:
   const { account } = useActiveWeb3React()
   const isConnected = !!account
-  const isHarvestButtonDisabled = false // TODO:
+  const isClaimButtonDisabled = false // TODO:
   const isStakeButtonDisabled = false // TODO:
 
   return (
     <StyledCard>
       <Box p="24px">
-        <CardHeading
-          lpLabel={`MS: ${id}`}
-          token={testnetTokens.dfh}
-          quoteToken={testnetTokens.dfh}
-          multiplier={`${multiplier}X`}
-        />
+        <CardHeading lpLabel={`MS: ${id}`} token={testnetTokens.dfh} quoteToken={testnetTokens.dfh} isHideMultiplier />
         <Row field="Giá Đầu Vào:" value={formattedExpectInput} />
         <Row field="Giá Đầu Ra:" value={formattedExpectOutput} />
         <Row field="Lợi nhuận kì vọng:" value={formattedExpectProfit} />
@@ -122,8 +118,8 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
             </Text>
             <Text fontSize="14px">≈ 123,456.789 VND</Text>
           </Box>
-          <Button variant="primary" disabled={isHarvestButtonDisabled}>
-            {t('Harvest')}
+          <Button variant="primary" disabled={isClaimButtonDisabled} onClick={() => onClaim(id)}>
+            {t('Claim profit')}
           </Button>
         </Flex>
         {!isConnected ? (

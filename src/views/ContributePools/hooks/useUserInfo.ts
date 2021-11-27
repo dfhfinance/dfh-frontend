@@ -1,5 +1,5 @@
 import { useContributePoolContract } from 'hooks/useContract'
-import { useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
 
@@ -8,27 +8,34 @@ export interface UserInfo {
   receivedAmount: ethers.BigNumber
 }
 
-export default function useUserInfo(poolId: number): UserInfo | undefined {
+export default function useUserInfo(poolId: number): [UserInfo | undefined, () => void] {
   const contributePoolContract = useContributePoolContract()
   const { account } = useActiveWeb3React()
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const isFetching = useRef(false)
+  const [count, setCount] = useState(1)
 
-  const fetchData = async () => {
-    if (!isFetching.current) {
-      isFetching.current = true
-      if (account) {
-        const newUserInfo = await contributePoolContract.userInfo(poolId, account)
-        setUserInfo({
-          amount: newUserInfo.amount,
-          receivedAmount: newUserInfo.receivedAmount,
-        })
+  const refetchUserInfo = useCallback(() => {
+    setCount((prev) => prev + 1)
+  }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (count && !isFetching.current) {
+        isFetching.current = true
+        if (account) {
+          const newUserInfo = await contributePoolContract.userInfo(poolId, account)
+          setUserInfo({
+            amount: newUserInfo.amount,
+            receivedAmount: newUserInfo.receivedAmount,
+          })
+        }
+        isFetching.current = false
       }
-      isFetching.current = false
     }
-  }
 
-  fetchData()
+    fetchData()
+  }, [count, account, poolId, contributePoolContract])
 
-  return userInfo
+  return [userInfo, refetchUserInfo]
 }

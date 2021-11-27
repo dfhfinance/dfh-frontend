@@ -11,7 +11,7 @@ import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import useApprovePool from 'views/ContributePools/hooks/useApprovePool'
 import { PoolInfo } from 'views/ContributePools/hooks/useContributedPoolInfos'
 import useContributedToken from 'views/ContributePools/hooks/useContributedToken'
-import useProfitUser from 'views/ContributePools/hooks/useProfitUser'
+import usePendingProfit from 'views/ContributePools/hooks/usePendingProfit'
 import useUserInfo from 'views/ContributePools/hooks/useUserInfo'
 import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
@@ -89,15 +89,25 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
         contributedToken.symbol
       }`
     : 'Loading...'
-  const profit = useProfitUser(id)
-  const formattedProfit =
-    contributedToken && profit
-      ? `${formatBigNumber(profit, contributedToken.decimals, contributedToken.decimals)} ${contributedToken.symbol}`
+  const pendingProfit = usePendingProfit(id)
+  const formattedPendingProfit =
+    contributedToken && pendingProfit
+      ? `${formatBigNumber(pendingProfit, contributedToken.decimals, contributedToken.decimals)} ${
+          contributedToken.symbol
+        }`
       : 'Loading...'
-  const { amount: stakedAmount } = useUserInfo(id) ?? {}
+  const userInfo = useUserInfo(id)
+  const { amount: stakedAmount, receivedAmount } = userInfo[0] ?? {}
+  const refetchUserInfo = userInfo[1]
   const formattedStakedAmount =
     contributedToken && stakedAmount
       ? `${formatBigNumber(stakedAmount, contributedToken.decimals, contributedToken.decimals)} ${
+          contributedToken.symbol
+        }`
+      : 'Loading...'
+  const formattedReceivedAmount =
+    contributedToken && receivedAmount
+      ? `${formatBigNumber(receivedAmount, contributedToken.decimals, contributedToken.decimals)} ${
           contributedToken.symbol
         }`
       : 'Loading...'
@@ -122,7 +132,8 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   // status: 0 in campaign.
   // status: 1 end campaign.
   // status: 2 close.
-  const isClaimButtonDisabled = Date.now() < endCampaignTimestamp || status === 0 || !profit || profit.eq('0')
+  const isClaimButtonDisabled =
+    Date.now() < endCampaignTimestamp || status === 0 || !pendingProfit || pendingProfit.eq('0')
   const isStakeButtonDisabled = Date.now() > endCampaignTimestamp || status !== 0 || totalStaked.gte(totalStakeMax)
 
   const contributedTokenBalance = useTokenBalance(contributedTokenAddress).balance
@@ -155,7 +166,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       max={contributedTokenBalance}
       decimals={contributedToken?.decimals}
       symbol={contributedToken?.symbol}
-      onConfirm={(amount) => onStake(id, amount, contributedToken)}
+      onConfirm={(amount) => onStake(id, amount, contributedToken, refetchUserInfo)}
     />,
   )
 
@@ -179,9 +190,11 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
         <Flex justifyContent="space-between" alignItems="center" mb="12px">
           <Box>
             <Text fontSize="24px" bold>
-              {formattedProfit}
+              {t('Chưa nhận')}: {formattedPendingProfit}
             </Text>
-            <Text fontSize="14px">≈ 123,456.789 VND</Text>
+            <Text fontSize="14px">
+              {t('Đã nhận')}: ${formattedReceivedAmount}
+            </Text>
           </Box>
           <Button variant="primary" disabled={isClaimButtonDisabled} onClick={() => onClaim(id)}>
             {t('Claim profit')}

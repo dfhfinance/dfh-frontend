@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
 
-export default function useProfitUser(poolId: number): ethers.BigNumber | undefined {
+export default function usePendingProfit(poolId: number): ethers.BigNumber | undefined {
   const contributePoolContract = useContributePoolContract()
   const { account } = useActiveWeb3React()
   const [profit, setProfit] = useState<ethers.BigNumber>()
@@ -11,7 +11,7 @@ export default function useProfitUser(poolId: number): ethers.BigNumber | undefi
   useEffect(() => {
     const fetchData = async () => {
       if (account) {
-        const newProfit = await contributePoolContract.getProfitUser(poolId, account)
+        const newProfit = await contributePoolContract.getPendingProfit(poolId, account)
         setProfit(newProfit)
       }
     }

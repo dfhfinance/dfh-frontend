@@ -10,10 +10,11 @@ const useStakePool = () => {
   const contributePoolContract = useContributePoolContract()
 
   return useCallback(
-    async (poolId: number, amount: string, token: ContributedToken) => {
+    async (poolId: number, amount: string, token: ContributedToken, refetchUserInfo: () => void) => {
       const rawAmount = getDecimalAmount(new BigNumber(amount), token.decimals)
       const tx = await callWithGasPrice(contributePoolContract, 'deposit', [poolId, rawAmount.toString()])
       const receipt = await tx.wait()
+      refetchUserInfo()
       return receipt.status
     },
     [contributePoolContract, callWithGasPrice],

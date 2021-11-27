@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Flex, Modal, Text } from '@dfh-finance/uikit'
 import { ModalActions, ModalInput } from 'components/Modal'
 import { useTranslation } from 'contexts/Localization'
@@ -23,6 +23,13 @@ const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = ''
   const [val, setVal] = useState('')
   const valBn: BigNumber | undefined = val ? getDecimalAmount(new BigNumber(val), decimals) : undefined
   const [pendingTx, setPendingTx] = useState(false)
+
+  const isMounted = useRef(true)
+  useEffect(() => {
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
@@ -74,7 +81,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = ''
             try {
               await onConfirm(val)
               toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
-              setPendingTx(false)
+              if (isMounted.current) {
+                setPendingTx(false)
+              }
               onDismiss()
             } catch (e) {
               toastError(
@@ -82,7 +91,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = ''
                 t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
               )
               console.error(e)
-              setPendingTx(false)
+              if (isMounted.current) {
+                setPendingTx(false)
+              }
             }
           }}
         >

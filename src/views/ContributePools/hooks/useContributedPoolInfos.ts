@@ -58,13 +58,6 @@ export default function useContributePoolInfos(): PoolInfo[] {
     }
 
     fetchData()
-    // if (isWindowVisible) {
-    //   timer.current = setInterval(fetchData, 6000)
-    // }
-    //
-    // return () => {
-    //   clearInterval(timer.current)
-    // }
   }, [contributePoolContract])
 
   return poolInfos

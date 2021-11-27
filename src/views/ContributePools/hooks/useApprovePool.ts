@@ -22,6 +22,7 @@ const useApprovePool = (bep20Address: string) => {
   }, [bep20Contract, contributePoolContract, callWithGasPrice])
 
   const fetchApproveBEP20 = useCallback(async () => {
+    if (!account) return
     const approve = await bep20Contract?.allowance(account, contributePoolContract.address)
     if (approve.toString() === '0') {
       setIsApprove(false)

@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import { AddIcon, Box, Button, Card, Flex, IconButton, MinusIcon, Slider, Text } from '@dfh-finance/uikit'
-import styled from 'styled-components'
-import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
+import { Box, Button, Card, Flex, Slider, Text } from '@dfh-finance/uikit'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { testnetTokens } from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { IconButtonWrapper } from 'views/Farms/components/FarmCard/StakeAction'
-import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
-import { formatBigNumber, formatNumber } from 'utils/formatBalance'
-import { PoolInfo } from 'views/ContributePools/useContributedPoolInfos'
 import { useToken } from 'hooks/Tokens'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { ethersToBigNumber } from 'utils/bigNumber'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import useApprovePool from 'views/ContributePools/hooks/useApprovePool'
+import { PoolInfo } from 'views/ContributePools/useContributedPoolInfos'
 import useProfitUser from 'views/ContributePools/useProfitUser'
 import useUserInfo from 'views/ContributePools/useUserInfo'
-import { ethers } from 'ethers'
-import { ethersToBigNumber } from 'utils/bigNumber'
-import BigNumber from 'bignumber.js'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
+import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
+import useStakePool from './hooks/useStakePool'
 
 const StyledCard = styled(Card)`
   width: 550px;
@@ -45,6 +44,8 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
 }
 
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
+  const { isApproved, onApprove } = useApprovePool(poolInfo.contributedToken)
+  const onStake = useStakePool()
   const { t } = useTranslation()
   const {
     expectInput,
@@ -95,7 +96,6 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const multiplier = 10 // TODO:
   const { account } = useActiveWeb3React()
   const isConnected = !!account
-  const isApproved = true // TODO:
   const isHarvestButtonDisabled = false // TODO:
   const isStakeButtonDisabled = false // TODO:
 
@@ -129,7 +129,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
         {!isConnected ? (
           <ConnectWalletButton width="100%" />
         ) : !isApproved ? (
-          <Button variant="primary" width="100%">
+          <Button variant="primary" width="100%" onClick={onApprove}>
             {t('Enable Contract')}
           </Button>
         ) : (
@@ -144,7 +144,11 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
                 </Text>
                 <Text fontSize="14px">≈ 123,456.789 VND</Text>
               </Box>
-              <Button variant="primary" disabled={isStakeButtonDisabled}>
+              <Button
+                variant="primary"
+                disabled={isStakeButtonDisabled}
+                onClick={() => onStake(id, '1', contributedToken)}
+              >
                 {t('Stake')}
               </Button>
             </Flex>

@@ -93,6 +93,6 @@ export default {
   },
   contributePool: {
     56: '', // TODO:
-    97: '0x1CE688B91c05B70C2ebd1499b2efB716EA7dd694',
+    97: '0xfcEe2f8c2FEC50c8b7D6AA5a8b9045762C997C75',
   },
 }

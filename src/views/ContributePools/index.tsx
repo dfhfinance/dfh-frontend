@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { Box } from '@dfh-finance/uikit'
 import styled from 'styled-components'
 import ContributePoolCard from 'views/ContributePools/ContributePoolCard'
-import useContributePoolInfos from './useContributedPoolInfos'
+import useContributePoolInfos from 'views/ContributePools/hooks/useContributedPoolInfos'
 
 const Container = styled(Box)`
   grid-gap: 16px;

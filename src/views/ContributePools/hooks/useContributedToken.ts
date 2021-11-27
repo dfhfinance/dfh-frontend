@@ -1,4 +1,4 @@
-import { useERC20 } from 'hooks/useContract'
+import { useBEP20 } from 'hooks/useContract'
 import { useEffect, useState } from 'react'
 
 export interface ContributedToken {
@@ -8,7 +8,7 @@ export interface ContributedToken {
 }
 
 export default function useContributedToken(address: string): ContributedToken | undefined {
-  const contract = useERC20(address)
+  const contract = useBEP20(address)
   const [token, setToken] = useState<ContributedToken>()
 
   useEffect(() => {

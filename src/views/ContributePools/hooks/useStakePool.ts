@@ -3,7 +3,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useContributePoolContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { ContributedToken } from '../useContributedToken'
+import { ContributedToken } from 'views/ContributePools/hooks/useContributedToken'
 
 const useStakePool = () => {
   const { callWithGasPrice } = useCallWithGasPrice()

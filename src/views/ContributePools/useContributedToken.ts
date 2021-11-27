@@ -1,9 +1,14 @@
-import { useBEP20 } from 'hooks/useContract'
+import { useERC20 } from 'hooks/useContract'
 import { useEffect, useState } from 'react'
-import { ContributedToken } from 'views/ContributePools/ContributePoolCard'
+
+export interface ContributedToken {
+  address: string
+  symbol: string
+  decimals: number
+}
 
 export default function useContributedToken(address: string): ContributedToken | undefined {
-  const contract = useBEP20(address)
+  const contract = useERC20(address)
   const [token, setToken] = useState<ContributedToken>()
 
   useEffect(() => {

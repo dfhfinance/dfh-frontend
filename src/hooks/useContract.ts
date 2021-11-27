@@ -65,6 +65,14 @@ export const useERC20 = (address: string) => {
   return useMemo(() => getBep20Contract(address, library.getSigner()), [address, library])
 }
 
+export const useBEP20 = (address: string) => {
+  const { account, library } = useActiveWeb3React()
+  return useMemo(
+    () => getBep20Contract(address, account ? library.getSigner(account) : library),
+    [address, account, library],
+  )
+}
+
 /**
  * @see https://docs.openzeppelin.com/contracts/3.x/api/token/erc721
  */

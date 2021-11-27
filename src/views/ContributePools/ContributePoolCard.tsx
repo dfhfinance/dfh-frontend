@@ -44,6 +44,12 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
   )
 }
 
+export interface ContributedToken {
+  address: string
+  symbol: string
+  decimals: number
+}
+
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { isApproved, onApprove } = useApprovePool(poolInfo.contributedToken)
   const onStake = useStakePool()

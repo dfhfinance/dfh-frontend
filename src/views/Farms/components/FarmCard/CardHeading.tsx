@@ -8,6 +8,7 @@ import { TokenPairImage } from 'components/TokenImage'
 export interface ExpandableSectionProps {
   lpLabel?: string
   multiplier?: string
+  isHideMultiplier?: boolean
   isCommunityFarm?: boolean
   token: Token
   quoteToken: Token
@@ -23,7 +24,14 @@ const MultiplierTag = styled(Tag)`
   margin-left: 4px;
 `
 
-const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, isCommunityFarm, token, quoteToken }) => {
+const CardHeading: React.FC<ExpandableSectionProps> = ({
+  lpLabel,
+  multiplier,
+  isCommunityFarm,
+  token,
+  quoteToken,
+  isHideMultiplier,
+}) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={64} height={64} />
@@ -33,9 +41,9 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, is
           {isCommunityFarm ? <CommunityTag /> : <CoreTag />}
           {multiplier ? (
             <MultiplierTag variant="secondary">{multiplier}</MultiplierTag>
-          ) : (
+          ) : !isHideMultiplier ? (
             <Skeleton ml="4px" width={42} height={28} />
-          )}
+          ) : null}
         </Flex>
       </Flex>
     </Wrapper>

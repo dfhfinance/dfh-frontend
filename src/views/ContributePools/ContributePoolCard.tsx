@@ -1,22 +1,20 @@
-import React, { useState } from 'react'
-import { AddIcon, Box, Button, Card, Flex, IconButton, MinusIcon, Slider, Text } from '@dfh-finance/uikit'
+import React, { useEffect, useState } from 'react'
+import { Box, Button, Card, Flex, Slider, Text } from '@dfh-finance/uikit'
 import styled from 'styled-components'
 import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
 import { testnetTokens } from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { IconButtonWrapper } from 'views/Farms/components/FarmCard/StakeAction'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { PoolInfo } from 'views/ContributePools/useContributedPoolInfos'
-import { useToken } from 'hooks/Tokens'
 import useProfitUser from 'views/ContributePools/useProfitUser'
 import useUserInfo from 'views/ContributePools/useUserInfo'
-import { ethers } from 'ethers'
 import { ethersToBigNumber } from 'utils/bigNumber'
-import BigNumber from 'bignumber.js'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useERC20 } from 'hooks/useContract'
+import useContributedToken from 'views/ContributePools/useContributedToken'
 
 const StyledCard = styled(Card)`
   width: 550px;
@@ -44,6 +42,12 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
   )
 }
 
+export interface ContributedToken {
+  address: string
+  symbol: string
+  decimals: number
+}
+
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { t } = useTranslation()
   const {
@@ -55,7 +59,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
     // Tổng token đã stake vào pool.
     totalStaked,
   } = poolInfo
-  const contributedToken = useToken(contributedTokenAddress)
+  const contributedToken = useContributedToken(contributedTokenAddress)
   const formattedExpectInput = `${formatNumber(expectInput, 0, 3)} VND`
   const formattedExpectOutput = `${formatNumber(expectOutput, 0, 3)} VND`
   const formattedExpectProfit = `${formatNumber(expectProfit, 0, 3)} VND`
@@ -92,7 +96,6 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       : 0
   const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const multiplier = 10 // TODO:
   const { account } = useActiveWeb3React()
   const isConnected = !!account
   const isApproved = true // TODO:
@@ -102,12 +105,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   return (
     <StyledCard>
       <Box p="24px">
-        <CardHeading
-          lpLabel={`MS: ${id}`}
-          token={testnetTokens.dfh}
-          quoteToken={testnetTokens.dfh}
-          multiplier={`${multiplier}X`}
-        />
+        <CardHeading lpLabel={`MS: ${id}`} token={testnetTokens.dfh} quoteToken={testnetTokens.dfh} isHideMultiplier />
         <Row field="Giá Đầu Vào:" value={formattedExpectInput} />
         <Row field="Giá Đầu Ra:" value={formattedExpectOutput} />
         <Row field="Lợi nhuận kì vọng:" value={formattedExpectProfit} />

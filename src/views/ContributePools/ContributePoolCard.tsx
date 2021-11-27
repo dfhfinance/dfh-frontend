@@ -1,10 +1,10 @@
 import { Box, Button, Card, Flex, Slider, Text, useModal } from '@dfh-finance/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { testnetTokens } from 'config/constants/tokens'
+import { mainnetTokens, testnetTokens } from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
@@ -17,9 +17,9 @@ import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
 import useClaimProfit from 'views/ContributePools/hooks/useClaimProfit'
 import useStakePool from 'views/ContributePools/hooks/useStakePool'
-import DepositModal from 'views/Farms/components/DepositModal'
 import StakeModal from 'views/ContributePools/StakeModal'
-import useTokenBalance from 'hooks/useTokenBalance'
+import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
+import useIsWindowVisible from 'hooks/useIsWindowVisible'
 
 const StyledCard = styled(Card)`
   width: 550px;
@@ -51,6 +51,15 @@ export interface ContributedToken {
   address: string
   symbol: string
   decimals: number
+}
+
+const toHHMMSS = (milliseconds: number) => {
+  const secs = Math.floor(milliseconds / 1000)
+  const hours = Math.floor(secs / 3600)
+  const minutes = Math.floor(secs / 60) % 60
+  const seconds = secs % 60
+
+  return [hours, minutes, seconds].map((v) => (v < 10 ? `0${v}` : v)).join(':')
 }
 
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
@@ -116,7 +125,33 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const isClaimButtonDisabled = Date.now() < endCampaignTimestamp || status === 0
   const isStakeButtonDisabled = Date.now() > endCampaignTimestamp || status !== 0 || totalStaked.gte(totalStakeMax)
 
-  const contributedTokenBalance = useTokenBalance(contributedTokenAddress).balance
+  const tokenBalance = useTokenBalance(contributedTokenAddress)
+  const bnbBalance = useGetBnbBalance()
+  const isContributedTokenBnb =
+    contributedTokenAddress === mainnetTokens.wbnb.address || contributedTokenAddress === testnetTokens.wbnb.address
+  const contributedTokenBalance = isContributedTokenBnb ? ethersToBigNumber(bnbBalance.balance) : tokenBalance.balance
+
+  const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
+  const formattedStakeTimeRemaining = toHHMMSS(stakeTimeRemaining)
+  const isWindowVisible = useIsWindowVisible()
+  const timer = useRef(null)
+
+  useEffect(() => {
+    if (isWindowVisible) {
+      timer.current = setInterval(() => {
+        const now = Date.now()
+        if (now < endCampaignTimestamp) {
+          setStakeTimeRemaining(endCampaignTimestamp - now)
+        } else if (stakeTimeRemaining !== 0) {
+          setStakeTimeRemaining(0)
+        }
+      }, 1000)
+    }
+
+    return () => {
+      clearInterval(timer.current)
+    }
+  }, [stakeTimeRemaining, endCampaignTimestamp, isWindowVisible])
 
   const [onPresentStakeModal] = useModal(
     <StakeModal
@@ -131,11 +166,17 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   return (
     <StyledCard>
       <Box p="24px">
-        <CardHeading lpLabel={`MS: ${id}`} token={testnetTokens.dfh} quoteToken={testnetTokens.dfh} isHideMultiplier />
+        <CardHeading
+          lpLabel={`MS: ${`00${id}`.slice(-3)}`}
+          token={testnetTokens.dfh}
+          quoteToken={testnetTokens.dfh}
+          isHideMultiplier
+        />
         <Row field="Giá Đầu Vào:" value={formattedExpectInput} />
         <Row field="Giá Đầu Ra:" value={formattedExpectOutput} />
         <Row field="Lợi nhuận kì vọng:" value={expectProfitInPercentage} />
-        <Row field="Tổng vốn huy động:" value={`${formattedTotalStakeMax}`} />
+        <Row field="Tổng vốn huy động:" value={formattedTotalStakeMax} />
+        <Row field="Thời gian đặt cọc còn lại:" value={formattedStakeTimeRemaining} />
         <Text color="secondary" textTransform="uppercase" bold mt="12px">
           Lợi nhuận của bạn
         </Text>

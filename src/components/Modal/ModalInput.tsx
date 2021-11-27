@@ -69,6 +69,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   addLiquidityUrl,
   inputTitle,
   decimals = 18,
+  placeholder,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -96,7 +97,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
             step="any"
             min="0"
             onChange={onChange}
-            placeholder="0"
+            placeholder={placeholder ?? '0'}
             value={value}
           />
           <Button scale="sm" onClick={onSelectMax} mr="8px">

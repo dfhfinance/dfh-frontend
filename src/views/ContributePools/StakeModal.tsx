@@ -31,15 +31,7 @@ interface DepositModalProps {
   onDismiss?: () => void
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({
-  min,
-  max,
-  decimals,
-  symbol = '',
-  addLiquidityUrl,
-  onConfirm,
-  onDismiss,
-}) => {
+const DepositModal: React.FC<DepositModalProps> = ({ min, max, decimals, symbol = '', onConfirm, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
 
@@ -63,24 +55,26 @@ const DepositModal: React.FC<DepositModalProps> = ({
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-  const formattedMin = `${getFullDisplayBalance(min, decimals ?? 18, Math.min(6, decimals))} ${symbol}`
+  const formattedMin = getFullDisplayBalance(min, decimals ?? 18, Math.min(6, decimals))
 
   return (
     <Modal title={t('Stake')} onDismiss={onDismiss}>
       <ModalInput
+        placeholder={formattedMin}
         value={val}
         onSelectMax={handleSelectMax}
         onChange={handleChange}
         max={fullBalance}
         symbol={symbol}
-        addLiquidityUrl={addLiquidityUrl}
         inputTitle={t('Stake')}
       />
       <Flex mt="24px" alignItems="center" justifyContent="space-between">
         <Text mr="8px" color="textSubtle">
           {t('Min amount')}:
         </Text>
-        <Text color="textSubtle">{formattedMin}</Text>
+        <Text color="textSubtle">
+          {formattedMin} {symbol}
+        </Text>
       </Flex>
       <ModalActions>
         <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
@@ -109,9 +103,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
           {pendingTx ? t('Confirming') : t('Confirm')}
         </Button>
       </ModalActions>
-      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
-        {t('Get %symbol%', { symbol })}
-      </LinkExternal>
     </Modal>
   )
 }

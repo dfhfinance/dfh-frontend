@@ -8,8 +8,15 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { IconButtonWrapper } from 'views/Farms/components/FarmCard/StakeAction'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
-import { PoolInfo } from 'views/ContributePools'
-import { getFullDisplayBalance } from 'utils/formatBalance'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import { PoolInfo } from 'views/ContributePools/useContributedPoolInfos'
+import { useToken } from 'hooks/Tokens'
+import useProfitUser from 'views/ContributePools/useProfitUser'
+import useUserInfo from 'views/ContributePools/useUserInfo'
+import { ethers } from 'ethers'
+import { ethersToBigNumber } from 'utils/bigNumber'
+import BigNumber from 'bignumber.js'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const StyledCard = styled(Card)`
   width: 550px;
@@ -39,16 +46,58 @@ const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
 
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { t } = useTranslation()
+  const {
+    expectInput,
+    expectOutput,
+    expectProfit,
+    totalStakeMax,
+    contributedToken: contributedTokenAddress,
+    // Tổng token đã stake vào pool.
+    totalStaked,
+  } = poolInfo
+  const contributedToken = useToken(contributedTokenAddress)
+  const formattedExpectInput = `${formatNumber(expectInput, 0, 3)} VND`
+  const formattedExpectOutput = `${formatNumber(expectOutput, 0, 3)} VND`
+  const formattedExpectProfit = `${formatNumber(expectProfit, 0, 3)} VND`
+  const formattedTotalStakeMax = contributedToken
+    ? `${formatBigNumber(totalStakeMax, contributedToken.decimals, contributedToken.decimals)} ${
+        contributedToken.symbol
+      }`
+    : 'Loading...'
+  const profit = useProfitUser(id)
+  const formattedProfit =
+    contributedToken && profit
+      ? `${formatBigNumber(profit, contributedToken.decimals, contributedToken.decimals)} ${contributedToken.symbol}`
+      : 'Loading...'
+  const { amount: stakedAmount } = useUserInfo(id) ?? {}
+  const formattedStakedAmount =
+    contributedToken && stakedAmount
+      ? `${formatBigNumber(stakedAmount, contributedToken.decimals, contributedToken.decimals)} ${
+          contributedToken.symbol
+        }`
+      : 'Loading...'
+  const formattedTotalStaked =
+    contributedToken && totalStaked
+      ? `${formatBigNumber(totalStaked, contributedToken.decimals, contributedToken.decimals)} ${
+          contributedToken.symbol
+        }`
+      : 'Loading...'
+  const totalStakedBigNumber = totalStaked && ethersToBigNumber(totalStaked)
+  const totalStakeMaxBigNumber = totalStakeMax && ethersToBigNumber(totalStakeMax)
+  const totalStakedInPercentage =
+    totalStakedBigNumber && totalStakeMaxBigNumber
+      ? totalStakedBigNumber.div(totalStakeMaxBigNumber).gt(1)
+        ? 100
+        : totalStakedBigNumber.div(totalStakeMaxBigNumber).times(100).toNumber()
+      : 0
+  const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const multiplier = 10
-  const isConnected = true
-  const isApproved = true
-  const isHarvestButtonDisabled = !isConnected || !isApproved
-  const interestInUSD = '1,746.502'
-  const interestInVND = '39,610,665'
-  const stakedInUSD = '100,000.000'
-  const stakedInVND = '2,268,000,000'
-  const totalLiquidityPercentage = 53
+  const multiplier = 10 // TODO:
+  const { account } = useActiveWeb3React()
+  const isConnected = !!account
+  const isApproved = true // TODO:
+  const isHarvestButtonDisabled = false // TODO:
+  const isStakeButtonDisabled = false // TODO:
 
   return (
     <StyledCard>
@@ -59,19 +108,19 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
           quoteToken={testnetTokens.dfh}
           multiplier={`${multiplier}X`}
         />
-        <Row field="Giá Đầu Vào:" value={poolInfo.expectInput.toString()} />
-        <Row field="Giá Đầu Ra:" value="330,000 USDT (≈ 7.5 tỉ VND)" />
-        <Row field="Lợi nhuận kì vọng:" value="10%" />
-        <Row field="Tổng Vốn Huy Động:" value="35,000 USDT (≈ 800 triệu VND)" />
+        <Row field="Giá Đầu Vào:" value={formattedExpectInput} />
+        <Row field="Giá Đầu Ra:" value={formattedExpectOutput} />
+        <Row field="Lợi nhuận kì vọng:" value={formattedExpectProfit} />
+        <Row field="Tổng vốn huy động:" value={`${formattedTotalStakeMax}`} />
         <Text color="secondary" textTransform="uppercase" bold mt="12px">
           Lợi nhuận của bạn
         </Text>
         <Flex justifyContent="space-between" alignItems="center" mb="12px">
           <Box>
             <Text fontSize="24px" bold>
-              {interestInUSD} USDT
+              {formattedProfit}
             </Text>
-            <Text fontSize="14px">≈ {interestInVND} VND</Text>
+            <Text fontSize="14px">≈ 123,456.789 VND</Text>
           </Box>
           <Button variant="primary" disabled={isHarvestButtonDisabled}>
             {t('Harvest')}
@@ -91,18 +140,13 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
             <Flex justifyContent="space-between" alignItems="center">
               <Box>
                 <Text fontSize="24px" bold>
-                  {stakedInUSD} USDT
+                  {formattedStakedAmount}
                 </Text>
-                <Text fontSize="14px">≈ {stakedInVND} VND</Text>
+                <Text fontSize="14px">≈ 123,456.789 VND</Text>
               </Box>
-              <IconButtonWrapper>
-                <IconButton variant="tertiary" mr="6px">
-                  <MinusIcon color="primary" width="14px" />
-                </IconButton>
-                <IconButton variant="tertiary">
-                  <AddIcon color="primary" width="14px" />
-                </IconButton>
-              </IconButtonWrapper>
+              <Button variant="primary" disabled={isStakeButtonDisabled}>
+                {t('Stake')}
+              </Button>
             </Flex>
           </>
         )}
@@ -118,14 +162,14 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
               Tổng tài sản của pool
             </Text>
             <Text textAlign="center" fontSize="24px" bold>
-              1,234,567.890 USDT
+              {formattedTotalStaked}
             </Text>
             <Slider
               name="total-liquidity-percentage"
               min={0}
               max={100}
-              value={totalLiquidityPercentage}
-              valueLabel={`${totalLiquidityPercentage}%`}
+              value={totalStakedInPercentage}
+              valueLabel={formattedTotalStakedInPercentage}
               onValueChanged={() => null}
             />
           </>

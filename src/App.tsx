@@ -19,7 +19,7 @@ import EasterEgg from './components/EasterEgg'
 import GlobalCheckClaimStatus from './components/GlobalCheckClaimStatus'
 import history from './routerHistory'
 // Views included in the main bundle
-import RealEstatePools from './views/RealEstatePools'
+import ContributePools from './views/ContributePools'
 import Swap from './views/Swap'
 import {
   RedirectDuplicateTokenIds,
@@ -89,7 +89,7 @@ const App: React.FC = () => {
               <Farms />
             </Route>
             <Route path="/pools">
-              <RealEstatePools />
+              <ContributePools />
             </Route>
             <Route path="/lottery">
               <Lottery />

@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Box } from '@dfh-finance/uikit'
 import styled from 'styled-components'
-import RealEstateCard from 'views/RealEstatePools/RealEstateCard'
+import ContributePoolCard from 'views/ContributePools/ContributePoolCard'
 import { ethersToBigNumber } from 'utils/bigNumber'
-import { useRealEstateContract } from 'hooks/useContract'
+import { useContributePoolContract } from 'hooks/useContract'
 import { BigNumber } from 'bignumber.js'
 import { ethers } from 'ethers'
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript'
@@ -47,17 +47,17 @@ export interface Pool {
   poolInfo: PoolInfo
 }
 
-export function useRealEstatePoolInfos(): PoolInfo[] {
-  const realEstateContract = useRealEstateContract()
+export function useContributePoolInfos(): PoolInfo[] {
+  const contributePoolContract = useContributePoolContract()
   const [poolInfos, setPoolInfos] = useState<PoolInfo[]>()
 
   useEffect(() => {
     const fetchData = async () => {
-      const numberOfPoolsBn = await realEstateContract.poolLength()
+      const numberOfPoolsBn = await contributePoolContract.poolLength()
       const numberOfPools: number = numberOfPoolsBn.toNumber()
       const promises = []
       for (let i = 0; i < numberOfPools; i++) {
-        promises.push(realEstateContract.poolInfo(i))
+        promises.push(contributePoolContract.poolInfo(i))
       }
       const responses = await Promise.all(promises)
       const newPoolInfos = responses.map(
@@ -81,19 +81,19 @@ export function useRealEstatePoolInfos(): PoolInfo[] {
     }
 
     fetchData()
-  }, [realEstateContract])
+  }, [contributePoolContract])
 
   return poolInfos
 }
 
-export default memo(function RealEstatePool() {
-  const poolInfos = useRealEstatePoolInfos()
+export default memo(function ContributePool() {
+  const poolInfos = useContributePoolInfos()
   console.log(`poolInfos`, poolInfos && poolInfos[0])
   return (
     <Container>
       {poolInfos &&
         poolInfos.map((poolInfo, index) => (
-          <RealEstateCard key={poolInfo.contributedToken} id={index} poolInfo={poolInfo} />
+          <ContributePoolCard key={poolInfo.contributedToken} id={index} poolInfo={poolInfo} />
         ))}
     </Container>
   )

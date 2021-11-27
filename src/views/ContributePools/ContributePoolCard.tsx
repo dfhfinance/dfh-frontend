@@ -193,7 +193,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
               {t('Chưa nhận')}: {formattedPendingProfit}
             </Text>
             <Text fontSize="14px">
-              {t('Đã nhận')}: ${formattedReceivedAmount}
+              {t('Đã nhận')}: {formattedReceivedAmount}
             </Text>
           </Box>
           <Button variant="primary" disabled={isClaimButtonDisabled} onClick={() => onClaim(id)}>

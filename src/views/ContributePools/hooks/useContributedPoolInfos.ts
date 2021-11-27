@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useContributePoolContract } from 'hooks/useContract'
 import { ethers } from 'ethers'
+import useIsWindowVisible from 'hooks/useIsWindowVisible'
 
 export interface PoolInfo {
   contributedToken: string
@@ -21,9 +22,13 @@ export interface PoolInfo {
 export default function useContributePoolInfos(): PoolInfo[] {
   const contributePoolContract = useContributePoolContract()
   const [poolInfos, setPoolInfos] = useState<PoolInfo[]>()
+  // const isWindowVisible = useIsWindowVisible()
+  // const timer = useRef(null)
+  const isFetching = useRef(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      isFetching.current = true
       const numberOfPoolsBn = await contributePoolContract.poolLength()
       const numberOfPools: number = numberOfPoolsBn.toNumber()
       const promises = []
@@ -49,9 +54,17 @@ export default function useContributePoolInfos(): PoolInfo[] {
         }),
       )
       setPoolInfos(newPoolInfos)
+      isFetching.current = false
     }
 
     fetchData()
+    // if (isWindowVisible) {
+    //   timer.current = setInterval(fetchData, 6000)
+    // }
+    //
+    // return () => {
+    //   clearInterval(timer.current)
+    // }
   }, [contributePoolContract])
 
   return poolInfos

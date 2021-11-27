@@ -1,27 +1,12 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { Flex, Text, Button, Modal, LinkExternal, CalculateIcon, IconButton } from '@dfh-finance/uikit'
+import { Button, Flex, Modal, Text } from '@dfh-finance/uikit'
 import { ModalActions, ModalInput } from 'components/Modal'
-import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import { useTranslation } from 'contexts/Localization'
-import { getFullDisplayBalance, formatNumber, formatBigNumber } from 'utils/formatBalance'
+import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
-import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 
-const AnnualRoiContainer = styled(Flex)`
-  cursor: pointer;
-`
-
-const AnnualRoiDisplay = styled(Text)`
-  width: 72px;
-  max-width: 72px;
-  overflow: hidden;
-  text-align: right;
-  text-overflow: ellipsis;
-`
-
-interface DepositModalProps {
+interface StakeModalProps {
   min: BigNumber
   max: BigNumber
   decimals?: number
@@ -31,11 +16,12 @@ interface DepositModalProps {
   onDismiss?: () => void
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ min, max, decimals, symbol = '', onConfirm, onDismiss }) => {
+const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = '', onConfirm, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
 
   const [val, setVal] = useState('')
+  const valBn: BigNumber | undefined = val ? getDecimalAmount(new BigNumber(val), decimals) : undefined
   const [pendingTx, setPendingTx] = useState(false)
 
   const fullBalance = useMemo(() => {
@@ -82,12 +68,13 @@ const DepositModal: React.FC<DepositModalProps> = ({ min, max, decimals, symbol 
         </Button>
         <Button
           width="100%"
-          disabled={pendingTx}
+          disabled={pendingTx || !valBn || valBn.isLessThan(min) || valBn.isGreaterThan(max)}
           onClick={async () => {
             setPendingTx(true)
             try {
               await onConfirm(val)
               toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
+              setPendingTx(false)
               onDismiss()
             } catch (e) {
               toastError(
@@ -95,7 +82,6 @@ const DepositModal: React.FC<DepositModalProps> = ({ min, max, decimals, symbol 
                 t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
               )
               console.error(e)
-            } finally {
               setPendingTx(false)
             }
           }}
@@ -107,4 +93,4 @@ const DepositModal: React.FC<DepositModalProps> = ({ min, max, decimals, symbol 
   )
 }
 
-export default DepositModal
+export default StakeModal

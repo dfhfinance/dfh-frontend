@@ -1,5 +1,5 @@
 import { useContributePoolContract } from 'hooks/useContract'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
 
@@ -12,9 +12,11 @@ export default function useUserInfo(poolId: number): UserInfo | undefined {
   const contributePoolContract = useContributePoolContract()
   const { account } = useActiveWeb3React()
   const [userInfo, setUserInfo] = useState<UserInfo>()
+  const isFetching = useRef(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
+    if (!isFetching.current) {
+      isFetching.current = true
       if (account) {
         const newUserInfo = await contributePoolContract.userInfo(poolId, account)
         setUserInfo({
@@ -22,9 +24,11 @@ export default function useUserInfo(poolId: number): UserInfo | undefined {
           receivedAmount: newUserInfo.receivedAmount,
         })
       }
+      isFetching.current = false
     }
-    fetchData()
-  }, [poolId, account, contributePoolContract])
+  }
+
+  fetchData()
 
   return userInfo
 }

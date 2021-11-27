@@ -122,7 +122,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   // status: 0 in campaign.
   // status: 1 end campaign.
   // status: 2 close.
-  const isClaimButtonDisabled = Date.now() < endCampaignTimestamp || status === 0
+  const isClaimButtonDisabled = Date.now() < endCampaignTimestamp || status === 0 || !profit || profit.eq('0')
   const isStakeButtonDisabled = Date.now() > endCampaignTimestamp || status !== 0 || totalStaked.gte(totalStakeMax)
 
   const contributedTokenBalance = useTokenBalance(contributedTokenAddress).balance

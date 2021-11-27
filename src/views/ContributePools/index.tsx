@@ -23,14 +23,16 @@ const Container = styled(Box)`
   }
 `
 
-export default memo(function ContributePool() {
+export default function ContributePool() {
   const poolInfos = useContributePoolInfos()
+
   return (
     <Container>
       {poolInfos &&
         poolInfos.map((poolInfo, index) => (
-          <ContributePoolCard key={poolInfo.contributedToken} id={index} poolInfo={poolInfo} />
+          // eslint-disable-next-line react/no-array-index-key
+          <ContributePoolCard key={index} id={index} poolInfo={poolInfo} />
         ))}
     </Container>
   )
-})
+}

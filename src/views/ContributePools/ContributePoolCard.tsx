@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import useApprovePool from 'views/ContributePools/hooks/useApprovePool'
-import { PoolInfo } from 'views/ContributePools/hooks/useContributedPoolInfos'
+import { PoolInfo, PoolStatus } from 'views/ContributePools/hooks/useContributedPoolInfos'
 import useContributedToken from 'views/ContributePools/hooks/useContributedToken'
 import usePendingProfit from 'views/ContributePools/hooks/usePendingProfit'
 import useUserInfo from 'views/ContributePools/hooks/useUserInfo'
@@ -20,13 +20,18 @@ import useStakePool from 'views/ContributePools/hooks/useStakePool'
 import StakeModal from 'views/ContributePools/StakeModal'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
+import { ethers } from 'ethers'
+import { TokenImage } from 'components/TokenImage'
+import { Token } from '@dfh-finance/sdk'
+import useTheme from 'hooks/useTheme'
 
 const StyledCard = styled(Card)`
-  width: 550px;
+  width: 450px;
   background: white;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding: 0 0 16px 0;
 
   > * {
     border-radius: 0; // Stupid UIKit's border-radius.
@@ -62,63 +67,88 @@ const toHHMMSS = (milliseconds: number) => {
   return [hours, minutes, seconds].map((v) => (v < 10 ? `0${v}` : v)).join(':')
 }
 
+const USD_TO_VND = 22700
+
+const PoolImage = styled(Box)<{ image: string }>`
+  height: 150px;
+  background-image: ${({ image }) => `url('${image}')`};
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    height: 200px;
+  }
+`
+
+const PoolTitle = styled(Flex)`
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 24px;
+  padding: 10px 36px;
+  margin-top: -30px;
+  background: ${({ theme }) => theme.nav.background};
+`
+
+const PoolInformation = styled(Box)`
+  padding: 8px 16px;
+`
+
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
-  const { isApproved, onApprove } = useApprovePool(poolInfo.contributedToken)
+  const { theme } = useTheme()
+  const { isApproved, onApprove } = useApprovePool(poolInfo.ctbToken)
   const onStake = useStakePool()
   const onClaim = useClaimProfit()
   const { t } = useTranslation()
   const {
-    expectInput,
-    expectOutput,
-    expectProfit,
-    totalStakeMax,
-    contributedToken: contributedTokenAddress,
-    // Tổng token đã stake vào pool.
-    totalStaked,
-    endCampaign,
+    ctbToken: ctbTokenAddress,
+    withdrawFee,
+    ctbMin,
+    totalCtbMax,
+    totalCtb, // Tổng token đã stake vào pool.
+    tokenPerShare,
+    withdrawnAmount,
+    totalRefund,
+    endCtbTime,
+    dfhAmount,
     status,
-    stakeMin,
+    purchasePrice,
+    expectedPrice,
+    expectProfit,
+    link,
+    image,
   } = poolInfo
-  const endCampaignTimestamp = endCampaign.toNumber()
-  const contributedToken = useContributedToken(contributedTokenAddress)
-  const formattedExpectInput = `${formatNumber(expectInput, 0, 3)} VND`
-  const formattedExpectOutput = `${formatNumber(expectOutput, 0, 3)} VND`
-  const expectProfitInPercentage = `${formatNumber((expectProfit * 100) / expectInput, 0, 2)}%`
-  const formattedTotalStakeMax = contributedToken
-    ? `${formatBigNumber(totalStakeMax, contributedToken.decimals, contributedToken.decimals)} ${
-        contributedToken.symbol
-      }`
+  const endCampaignTimestamp = endCtbTime.toNumber()
+  const ctbToken = useContributedToken(ctbTokenAddress)
+  const formattedExpectInput = `${formatNumber(purchasePrice, 0, 3)} VND`
+  const formattedExpectOutput = `${formatNumber(expectedPrice, 0, 3)} VND`
+  const expectProfitInPercentage = `${formatNumber((expectProfit * 100) / purchasePrice, 0, 2)}%`
+  const formattedTotalStakeMax = ctbToken
+    ? `${formatBigNumber(totalCtbMax, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
     : 'Loading...'
+  const formattedDFHAmount = `${formatBigNumber(dfhAmount, 6, 18)} DFH`
   const pendingProfit = usePendingProfit(id)
   const formattedPendingProfit =
-    contributedToken && pendingProfit
-      ? `${formatBigNumber(pendingProfit, contributedToken.decimals, contributedToken.decimals)} ${
-          contributedToken.symbol
-        }`
+    ctbToken && pendingProfit
+      ? `${formatBigNumber(pendingProfit, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const userInfo = useUserInfo(id)
   const { amount: stakedAmount, receivedAmount } = userInfo[0] ?? {}
   const refetchUserInfo = userInfo[1]
   const formattedStakedAmount =
-    contributedToken && stakedAmount
-      ? `${formatBigNumber(stakedAmount, contributedToken.decimals, contributedToken.decimals)} ${
-          contributedToken.symbol
-        }`
+    ctbToken && stakedAmount
+      ? `${formatBigNumber(stakedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const formattedReceivedAmount =
-    contributedToken && receivedAmount
-      ? `${formatBigNumber(receivedAmount, contributedToken.decimals, contributedToken.decimals)} ${
-          contributedToken.symbol
-        }`
+    ctbToken && receivedAmount
+      ? `${formatBigNumber(receivedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const formattedTotalStaked =
-    contributedToken && totalStaked
-      ? `${formatBigNumber(totalStaked, contributedToken.decimals, contributedToken.decimals)} ${
-          contributedToken.symbol
-        }`
+    ctbToken && totalCtb
+      ? `${formatBigNumber(totalCtb, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
-  const totalStakedBigNumber = totalStaked && ethersToBigNumber(totalStaked)
-  const totalStakeMaxBigNumber = totalStakeMax && ethersToBigNumber(totalStakeMax)
+  const totalStakedBigNumber = totalCtb && ethersToBigNumber(totalCtb)
+  const totalStakeMaxBigNumber = totalCtbMax && ethersToBigNumber(totalCtbMax)
   const totalStakedInPercentage =
     totalStakedBigNumber && totalStakeMaxBigNumber
       ? totalStakedBigNumber.div(totalStakeMaxBigNumber).gt(1)
@@ -129,14 +159,12 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const { account } = useActiveWeb3React()
   const isConnected = !!account
-  // status: 0 in campaign.
-  // status: 1 end campaign.
-  // status: 2 close.
   const isClaimButtonDisabled =
-    Date.now() < endCampaignTimestamp || status === 0 || !pendingProfit || pendingProfit.eq('0')
-  const isStakeButtonDisabled = Date.now() > endCampaignTimestamp || status !== 0 || totalStaked.gte(totalStakeMax)
+    Date.now() < endCampaignTimestamp || status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
+  const isStakeButtonDisabled =
+    Date.now() > endCampaignTimestamp || status !== PoolStatus.CONTRIBUTING || totalCtb.gte(totalCtbMax)
 
-  const contributedTokenBalance = useTokenBalance(contributedTokenAddress).balance
+  const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
 
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
   const formattedStakeTimeRemaining = toHHMMSS(stakeTimeRemaining)
@@ -162,35 +190,62 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
 
   const [onPresentStakeModal] = useModal(
     <StakeModal
-      min={ethersToBigNumber(stakeMin)}
+      min={ethersToBigNumber(ctbMin)}
       max={contributedTokenBalance}
-      decimals={contributedToken?.decimals}
-      symbol={contributedToken?.symbol}
-      onConfirm={(amount) => onStake(id, amount, contributedToken, refetchUserInfo)}
+      decimals={ctbToken?.decimals}
+      symbol={ctbToken?.symbol}
+      onConfirm={(amount) => onStake(id, amount, ctbToken, refetchUserInfo)}
     />,
   )
 
   return (
     <StyledCard>
-      <Box p="24px">
-        <CardHeading
-          lpLabel={`MS: ${`00${id}`.slice(-3)}`}
-          token={testnetTokens.dfh}
-          quoteToken={testnetTokens.dfh}
-          isHideMultiplier
-        />
-        <Row field="Giá Đầu Vào:" value={formattedExpectInput} />
-        <Row field="Giá Đầu Ra:" value={formattedExpectOutput} />
-        <Row field="Lợi nhuận kì vọng:" value={expectProfitInPercentage} />
-        <Row field="Tổng vốn huy động:" value={formattedTotalStakeMax} />
-        <Row field="Thời gian đặt cọc còn lại:" value={formattedStakeTimeRemaining} />
+      <PoolImage image={image} />
+      <PoolTitle>
+        <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>
+        {ctbToken && <TokenImage token={testnetTokens.dfh} width={40} height={40} />}
+      </PoolTitle>
+      <PoolInformation>
+        <Text color="secondary" textTransform="uppercase" bold mb="4px">
+          Thông tin BĐS
+        </Text>
+        <Row field="Giá đầu tư" value={formattedExpectInput} />
+        {showExpandableSection && (
+          <>
+            <Row field="Giá bán dự kiến" value={formattedExpectOutput} />
+            <Row field="Lợi nhuận kì vọng" value={expectProfitInPercentage} />
+            <Row field="Tổng vốn huy động" value={formattedTotalStakeMax} />
+            <Row field="Lượng DFH ký quỹ" value={formattedDFHAmount} />
+            <Row field="Thời gian đặt cọc còn lại:" value={formattedStakeTimeRemaining} />
+            <Text textAlign="center" fontSize="16px" mt="16px">
+              Tổng tài sản của pool
+            </Text>
+            <Text textAlign="center" fontSize="24px" bold>
+              {formattedTotalStaked}
+            </Text>
+            <Slider
+              name="total-liquidity-percentage"
+              min={0}
+              max={100}
+              value={totalStakedInPercentage}
+              valueLabel={formattedTotalStakedInPercentage}
+              onValueChanged={() => null}
+            />
+          </>
+        )}
+        <Box m={showExpandableSection ? '0' : '12px'}>
+          <ExpandableSectionButton
+            onClick={() => setShowExpandableSection(!showExpandableSection)}
+            expanded={showExpandableSection}
+          />
+        </Box>
         <Text color="secondary" textTransform="uppercase" bold mt="12px">
           Lợi nhuận của bạn
         </Text>
         <Flex justifyContent="space-between" alignItems="center" mb="12px">
           <Box>
             <Text fontSize="24px" bold>
-              {t('Chưa nhận')}: {formattedPendingProfit}
+              {formattedPendingProfit}
             </Text>
             <Text fontSize="14px">
               {t('Đã nhận')}: {formattedReceivedAmount}
@@ -224,31 +279,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
             </Flex>
           </>
         )}
-      </Box>
-      <ExpandingWrapper>
-        <ExpandableSectionButton
-          onClick={() => setShowExpandableSection(!showExpandableSection)}
-          expanded={showExpandableSection}
-        />
-        {showExpandableSection && (
-          <>
-            <Text textAlign="center" fontSize="16px" mt="16px">
-              Tổng tài sản của pool
-            </Text>
-            <Text textAlign="center" fontSize="24px" bold>
-              {formattedTotalStaked}
-            </Text>
-            <Slider
-              name="total-liquidity-percentage"
-              min={0}
-              max={100}
-              value={totalStakedInPercentage}
-              valueLabel={formattedTotalStakedInPercentage}
-              onValueChanged={() => null}
-            />
-          </>
-        )}
-      </ExpandingWrapper>
+      </PoolInformation>
     </StyledCard>
   )
 }

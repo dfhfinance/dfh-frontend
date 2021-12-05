@@ -10,6 +10,67 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "ctbToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint40",
+        "name": "purchasePrice",
+        "type": "uint40"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint40",
+        "name": "expectedPrice",
+        "type": "uint40"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "withdrawFee",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalCtbMax",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ctbMin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint48",
+        "name": "endCtbTime",
+        "type": "uint48"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "dfhAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddPool",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
@@ -41,6 +102,44 @@
       }
     ],
     "name": "AdminWithdraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClaimProfit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClosePool",
     "type": "event"
   },
   {
@@ -119,6 +218,11 @@
         "internalType": "address",
         "name": "_admin",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dfhToken",
+        "type": "address"
       }
     ],
     "name": "__ContributePool_init",
@@ -130,37 +234,52 @@
     "inputs": [
       {
         "internalType": "contract IERC20Upgradeable",
-        "name": "_contributedToken",
+        "name": "_ctbToken",
         "type": "address"
       },
       {
         "internalType": "uint40",
-        "name": "_expectInput",
+        "name": "_purchasePrice",
         "type": "uint40"
       },
       {
         "internalType": "uint40",
-        "name": "_expectOutput",
+        "name": "_expectedPrice",
         "type": "uint40"
       },
       {
-        "internalType": "uint8",
+        "internalType": "string",
+        "name": "_link",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_image",
+        "type": "string"
+      },
+      {
+        "internalType": "uint16",
         "name": "_withdrawFee",
-        "type": "uint8"
+        "type": "uint16"
       },
       {
         "internalType": "uint256",
-        "name": "_totalStakeMax",
+        "name": "_totalCtbMax",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_stakeMin",
+        "name": "_ctbMin",
         "type": "uint256"
       },
       {
+        "internalType": "uint48",
+        "name": "_endCtbTime",
+        "type": "uint48"
+      },
+      {
         "internalType": "uint256",
-        "name": "_endCampaign",
+        "name": "_dfhAmount",
         "type": "uint256"
       }
     ],
@@ -263,6 +382,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "dfhToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -281,6 +413,114 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20Upgradeable",
+            "name": "ctbToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "withdrawFee",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ctbMin",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalCtbMax",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalCtb",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenPerShare",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "withdrawnAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalRefund",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endCtbTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "dfhAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum ContributePool.PoolStatus",
+            "name": "status",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct ContributePool.PoolInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "purchasePrice",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint40",
+            "name": "expectedPrice",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint40",
+            "name": "expectProfit",
+            "type": "uint40"
+          },
+          {
+            "internalType": "string",
+            "name": "link",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "image",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct ContributePool.PoolMetaData",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -393,42 +633,27 @@
     "outputs": [
       {
         "internalType": "contract IERC20Upgradeable",
-        "name": "contributedToken",
+        "name": "ctbToken",
         "type": "address"
       },
       {
-        "internalType": "uint40",
-        "name": "expectInput",
-        "type": "uint40"
-      },
-      {
-        "internalType": "uint40",
-        "name": "expectOutput",
-        "type": "uint40"
-      },
-      {
-        "internalType": "uint40",
-        "name": "expectProfit",
-        "type": "uint40"
-      },
-      {
-        "internalType": "uint8",
+        "internalType": "uint16",
         "name": "withdrawFee",
-        "type": "uint8"
+        "type": "uint16"
       },
       {
         "internalType": "uint256",
-        "name": "stakeMin",
+        "name": "ctbMin",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "totalStakeMax",
+        "name": "totalCtbMax",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "totalStaked",
+        "name": "totalCtb",
         "type": "uint256"
       },
       {
@@ -448,7 +673,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "endCampaign",
+        "name": "endCtbTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dfhAmount",
         "type": "uint256"
       },
       {
@@ -474,8 +704,83 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "poolMetaData",
+    "outputs": [
+      {
+        "internalType": "uint40",
+        "name": "purchasePrice",
+        "type": "uint40"
+      },
+      {
+        "internalType": "uint40",
+        "name": "expectedPrice",
+        "type": "uint40"
+      },
+      {
+        "internalType": "uint40",
+        "name": "expectProfit",
+        "type": "uint40"
+      },
+      {
+        "internalType": "string",
+        "name": "link",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "image",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_newLink",
+        "type": "string"
+      }
+    ],
+    "name": "setPoolDescriptionLink",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_newLink",
+        "type": "string"
+      }
+    ],
+    "name": "setPoolImageLink",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -537,6 +842,11 @@
         "internalType": "uint256",
         "name": "receivedAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isStakingDfh",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

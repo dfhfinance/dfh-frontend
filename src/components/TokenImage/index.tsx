@@ -33,5 +33,6 @@ interface TokenImageProps extends ImageProps {
 }
 
 export const TokenImage: React.FC<TokenImageProps> = ({ token, ...props }) => {
-  return <UIKitTokenImage src={getImageUrlFromToken(token)} {...props} />
+  const src = isDfh(token) ? '/logo.png' : getImageUrlFromToken(token)
+  return <UIKitTokenImage src={src} {...props} />
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Slider, Text, useModal } from '@dfh-finance/uikit'
+import { Box, Button, Card, Flex, Link, Slider, Text, useModal } from '@dfh-finance/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { testnetTokens } from 'config/constants/tokens'
@@ -62,12 +62,10 @@ const toHHMMSS = (milliseconds: number) => {
   return [hours, minutes, seconds].map((v) => (v < 10 ? `0${v}` : v)).join(':')
 }
 
-const USD_TO_VND = 22700
-
 const PoolImage = styled(Box)<{ image: string }>`
   height: 150px;
   background-image: ${({ image }) => `url('${image}')`};
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
@@ -198,7 +196,9 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
 
   return (
     <StyledCard>
-      <PoolImage image={image} />
+      <Link target="_blank" href={link} style={{ display: 'block', width: '100%' }}>
+        <PoolImage image={image} />
+      </Link>
       <PoolTitle>
         <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>
         {ctbToken && <TokenImage token={testnetTokens.dfh} width={40} height={40} />}

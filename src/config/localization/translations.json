@@ -1741,5 +1741,12 @@
   "What are the fees?": "What are the fees?",
   "100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN CAKE tokens in our weekly CAKE burns.": "100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN CAKE tokens in our weekly CAKE burns.",
   "Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the CAKE burns.": "Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the CAKE burns.",
-  "The digitization and sharing platform for investment in the real estate industry": "Nền tảng số hoá và chia sẽ đầu tư vào ngành bất động sản"
+  "The digitization and sharing platform for investment in the real estate industry": "Nền tảng số hoá và chia sẽ đầu tư vào ngành bất động sản",
+  "Investment price": "Giá đầu tư",
+  "Estimated selling price": "Giá bán dự kiến",
+  "Expected profit": "Lợi nhuận kì vọng",
+  "Deposited DFH amount": "Lượng DFH ký quỹ",
+  "Remaining deposit time": "Thời gian đặt cọc còn lại",
+  "Enable Contract and DFH": "Bật Hợp đồng và DFH",
+  "Enable DFH": "Bật DFH"
 }

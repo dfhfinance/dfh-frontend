@@ -1742,5 +1742,12 @@
   "Mint Cost: To Be Announced": "Mint Cost: To Be Announced",
   "The smart contract address will be released soon before the sale starts.": "The smart contract address will be released soon before the sale starts.",
   "Supply Count": "Supply Count",
-  "The digitization and sharing platform for investment in the real estate industry": "Nền tảng số hoá và chia sẽ đầu tư vào ngành bất động sản"
+  "The digitization and sharing platform for investment in the real estate industry": "Nền tảng số hoá và chia sẽ đầu tư vào ngành bất động sản",
+  "Investment price": "Giá đầu tư",
+  "Estimated selling price": "Giá bán dự kiến",
+  "Expected profit": "Lợi nhuận kì vọng",
+  "Deposited DFH amount": "Lượng DFH ký quỹ",
+  "Remaining deposit time": "Thời gian đặt cọc còn lại",
+  "Enable Contract and DFH": "Bật Hợp đồng và DFH",
+  "Enable DFH": "Bật DFH"
 }

@@ -19,6 +19,7 @@ import StakeModal from 'views/ContributePools/StakeModal'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { TokenImage } from 'components/TokenImage'
+import { Token } from '@dfh-finance/sdk'
 
 const StyledCard = styled(Card)`
   width: 450px;
@@ -89,7 +90,7 @@ const PoolInformation = styled(Box)`
 
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account, chainId = +process.env.REACT_APP_CHAIN_ID } = useActiveWeb3React()
   const {
     ctbToken: ctbTokenAddress,
     withdrawFee,
@@ -170,6 +171,10 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   useEffect(() => {
     if (isWindowVisible) {
       timer.current = setInterval(() => {
+        if (status !== PoolStatus.CONTRIBUTING) {
+          setStakeTimeRemaining(0)
+          return
+        }
         const now = Date.now()
         if (now < endCampaignTimestamp) {
           setStakeTimeRemaining(endCampaignTimestamp - now)
@@ -182,7 +187,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
     return () => {
       clearInterval(timer.current)
     }
-  }, [stakeTimeRemaining, endCampaignTimestamp, isWindowVisible])
+  }, [status, stakeTimeRemaining, setStakeTimeRemaining, endCampaignTimestamp, isWindowVisible])
 
   const [onPresentStakeModal] = useModal(
     <StakeModal
@@ -201,20 +206,26 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       </Link>
       <PoolTitle>
         <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>
-        {ctbToken && <TokenImage token={testnetTokens.dfh} width={40} height={40} />}
+        {ctbToken && (
+          <TokenImage
+            token={ctbToken ? new Token(chainId, ctbToken.address, ctbToken.decimals) : testnetTokens.dfh}
+            width={40}
+            height={40}
+          />
+        )}
       </PoolTitle>
       <PoolInformation>
         <Text color="secondary" textTransform="uppercase" bold mb="4px">
           Thông tin BĐS
         </Text>
-        <Row field="Giá đầu tư" value={formattedExpectInput} />
+        <Row field={t('Investment price')} value={formattedExpectInput} />
         {showExpandableSection && (
           <>
             <Row field="Giá bán dự kiến" value={formattedExpectOutput} />
             <Row field="Lợi nhuận kì vọng" value={expectProfitInPercentage} />
             <Row field="Tổng vốn huy động" value={formattedTotalStakeMax} />
             <Row field="Lượng DFH ký quỹ" value={formattedDFHAmount} />
-            <Row field="Thời gian đặt cọc còn lại:" value={formattedStakeTimeRemaining} />
+            <Row field="Thời gian đặt cọc còn lại" value={formattedStakeTimeRemaining} />
             <Text textAlign="center" fontSize="16px" mt="16px">
               Tổng tài sản của pool
             </Text>

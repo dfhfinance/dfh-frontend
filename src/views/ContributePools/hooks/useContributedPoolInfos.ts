@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useContributePoolContract } from 'hooks/useContract'
 import { ethers } from 'ethers'
+import { useBlock } from 'state/block/hooks'
 
 export enum PoolStatus {
   CONTRIBUTING,
@@ -32,6 +33,7 @@ export default function useContributePoolInfos(): PoolInfo[] {
   const contributePoolContract = useContributePoolContract()
   const [poolInfos, setPoolInfos] = useState<PoolInfo[]>()
   const isFetching = useRef(false)
+  const { currentBlock } = useBlock()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +72,7 @@ export default function useContributePoolInfos(): PoolInfo[] {
     }
 
     fetchData()
-  }, [contributePoolContract])
+  }, [contributePoolContract, currentBlock])
 
   return poolInfos
 }

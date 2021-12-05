@@ -1746,8 +1746,13 @@
   "Investment price": "Giá đầu tư",
   "Estimated selling price": "Giá bán dự kiến",
   "Expected profit": "Lợi nhuận kì vọng",
+  "Total mobilized capital": "Tổng vốn huy động",
   "Deposited DFH amount": "Lượng DFH ký quỹ",
   "Remaining deposit time": "Thời gian đặt cọc còn lại",
   "Enable Contract and DFH": "Bật Hợp đồng và DFH",
-  "Enable DFH": "Bật DFH"
+  "Enable DFH": "Bật DFH",
+  "Real Estate Information": "Thông tin BĐS",
+  "Pool's total assets": "Tổng tài sản của pool",
+  "Your profit": "Lợi nhuận của bạn",
+  "Your contribution": "Đóng góp của bạn"
 }

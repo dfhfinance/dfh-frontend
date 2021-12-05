@@ -1746,9 +1746,13 @@
   "Investment price": "Investment price",
   "Estimated selling price": "Estimated selling price",
   "Expected profit": "Expected profit",
+  "Total mobilized capital": "Total mobilized capital",
   "Deposited DFH amount": "Deposited DFH amount",
   "Remaining deposit time": "Remaining deposit time",
   "Enable Contract and DFH": "Enable Contract and DFH",
   "Enable DFH": "Enable DFH",
-  "Real Estate Information": "Thông tin BĐS"
+  "Real Estate Information": "Real Estate Information",
+  "Pool's total assets": "Pool's total assets",
+  "Your profit": "Your profit",
+  "Your contribution": "Your contribution"
 }

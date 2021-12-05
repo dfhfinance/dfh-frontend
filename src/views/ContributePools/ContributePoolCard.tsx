@@ -216,18 +216,18 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       </PoolTitle>
       <PoolInformation>
         <Text color="secondary" textTransform="uppercase" bold mb="4px">
-          Thông tin BĐS
+          {t('Real Estate Information')}
         </Text>
         <Row field={t('Investment price')} value={formattedExpectInput} />
         {showExpandableSection && (
           <>
-            <Row field="Giá bán dự kiến" value={formattedExpectOutput} />
-            <Row field="Lợi nhuận kì vọng" value={expectProfitInPercentage} />
-            <Row field="Tổng vốn huy động" value={formattedTotalStakeMax} />
-            <Row field="Lượng DFH ký quỹ" value={formattedDFHAmount} />
-            <Row field="Thời gian đặt cọc còn lại" value={formattedStakeTimeRemaining} />
+            <Row field={t('Estimated selling price')} value={formattedExpectOutput} />
+            <Row field={t('Expected profit')} value={expectProfitInPercentage} />
+            <Row field={t('Total mobilized capital')} value={formattedTotalStakeMax} />
+            <Row field={t('Deposited DFH amount')} value={formattedDFHAmount} />
+            <Row field={t('Remaining deposit time')} value={formattedStakeTimeRemaining} />
             <Text textAlign="center" fontSize="16px" mt="16px">
-              Tổng tài sản của pool
+              {t("Pool's total assets")}
             </Text>
             <Text textAlign="center" fontSize="24px" bold>
               {formattedTotalStaked}
@@ -249,7 +249,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
           />
         </Box>
         <Text color="secondary" textTransform="uppercase" bold mt="12px">
-          Lợi nhuận của bạn
+          {t('Your profit')}
         </Text>
         <Flex justifyContent="space-between" alignItems="center" mb="12px">
           <Box>
@@ -257,7 +257,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
               {formattedPendingProfit}
             </Text>
             <Text fontSize="14px">
-              {t('Đã nhận')}: {formattedReceivedAmount}
+              {t('Claimed')}: {formattedReceivedAmount}
             </Text>
           </Box>
           <Button variant="primary" disabled={isClaimButtonDisabled} onClick={() => onClaim(id)}>
@@ -277,7 +277,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
         ) : (
           <>
             <Text color="secondary" textTransform="uppercase" bold mt="12px">
-              Đóng góp của bạn
+              {t('Your contribution')}
             </Text>
             <Flex justifyContent="space-between" alignItems="center">
               <Text fontSize="24px" bold>

@@ -13,17 +13,12 @@ import { PoolInfo, PoolStatus } from 'views/ContributePools/hooks/useContributed
 import useContributedToken from 'views/ContributePools/hooks/useContributedToken'
 import usePendingProfit from 'views/ContributePools/hooks/usePendingProfit'
 import useUserInfo from 'views/ContributePools/hooks/useUserInfo'
-import CardHeading from 'views/Farms/components/FarmCard/CardHeading'
-import { ExpandingWrapper } from 'views/Farms/components/FarmCard/FarmCard'
 import useClaimProfit from 'views/ContributePools/hooks/useClaimProfit'
 import useStakePool from 'views/ContributePools/hooks/useStakePool'
 import StakeModal from 'views/ContributePools/StakeModal'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
-import { ethers } from 'ethers'
 import { TokenImage } from 'components/TokenImage'
-import { Token } from '@dfh-finance/sdk'
-import useTheme from 'hooks/useTheme'
 
 const StyledCard = styled(Card)`
   width: 450px;
@@ -95,11 +90,8 @@ const PoolInformation = styled(Box)`
 `
 
 export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
-  const { theme } = useTheme()
-  const { isApproved, onApprove } = useApprovePool(poolInfo.ctbToken)
-  const onStake = useStakePool()
-  const onClaim = useClaimProfit()
   const { t } = useTranslation()
+  const { account } = useActiveWeb3React()
   const {
     ctbToken: ctbTokenAddress,
     withdrawFee,
@@ -118,6 +110,9 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
     link,
     image,
   } = poolInfo
+  const { isApprovedCtbToken, isApprovedDfh, onApprove } = useApprovePool(id, dfhAmount, ctbTokenAddress)
+  const onStake = useStakePool()
+  const onClaim = useClaimProfit()
   const endCampaignTimestamp = endCtbTime.toNumber()
   const ctbToken = useContributedToken(ctbTokenAddress)
   const formattedExpectInput = `${formatNumber(purchasePrice, 0, 3)} VND`
@@ -129,7 +124,9 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const formattedDFHAmount = `${formatBigNumber(dfhAmount, 6, 18)} DFH`
   const pendingProfit = usePendingProfit(id)
   const formattedPendingProfit =
-    ctbToken && pendingProfit
+    !account && ctbToken
+      ? `0.0 ${ctbToken.symbol}`
+      : ctbToken && pendingProfit
       ? `${formatBigNumber(pendingProfit, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const userInfo = useUserInfo(id)
@@ -140,7 +137,9 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       ? `${formatBigNumber(stakedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const formattedReceivedAmount =
-    ctbToken && receivedAmount
+    !account && ctbToken
+      ? `0.0 ${ctbToken.symbol}`
+      : ctbToken && receivedAmount
       ? `${formatBigNumber(receivedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const formattedTotalStaked =
@@ -157,7 +156,6 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
       : 0
   const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const { account } = useActiveWeb3React()
   const isConnected = !!account
   const isClaimButtonDisabled =
     Date.now() < endCampaignTimestamp || status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
@@ -257,9 +255,13 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
         </Flex>
         {!isConnected ? (
           <ConnectWalletButton width="100%" />
-        ) : !isApproved ? (
+        ) : !isApprovedCtbToken || !isApprovedDfh ? (
           <Button variant="primary" width="100%" onClick={onApprove}>
-            {t('Enable Contract')}
+            {!isApprovedCtbToken && !isApprovedDfh
+              ? t('Enable Contract and DFH')
+              : !isApprovedCtbToken
+              ? t('Enable Contract')
+              : t('Enable DFH')}
           </Button>
         ) : (
           <>
@@ -267,12 +269,9 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
               Đóng góp của bạn
             </Text>
             <Flex justifyContent="space-between" alignItems="center">
-              <Box>
-                <Text fontSize="24px" bold>
-                  {formattedStakedAmount}
-                </Text>
-                <Text fontSize="14px">≈ 123,456.789 VND</Text>
-              </Box>
+              <Text fontSize="24px" bold>
+                {formattedStakedAmount}
+              </Text>
               <Button variant="primary" disabled={isStakeButtonDisabled} onClick={onPresentStakeModal}>
                 {t('Stake')}
               </Button>

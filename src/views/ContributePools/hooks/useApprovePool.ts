@@ -1,41 +1,74 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
 import { useBEP20, useContributePoolContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useBlock } from 'state/block/hooks'
+import { mainnetTokens, testnetTokens } from 'config/constants/tokens'
 
-const useApprovePool = (bep20Address: string) => {
+const useApprovePool = (id: number, dfhAmount: ethers.BigNumber, ctbTokenAddress: string) => {
   const { currentBlock } = useBlock()
-  const bep20Contract = useBEP20(bep20Address)
+  const { chainId = +process.env.REACT_APP_CHAIN_ID } = useActiveWeb3React()
+  const ctbTokenContract = useBEP20(ctbTokenAddress)
+  const dfhContract = useBEP20(chainId === 97 ? testnetTokens.dfh.address : mainnetTokens.dfh.address)
+
   const contributePoolContract = useContributePoolContract()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { account } = useActiveWeb3React()
-  const [isApprove, setIsApprove] = useState(false)
-  const handleApprove = useCallback(async () => {
-    const tx = await callWithGasPrice(bep20Contract, 'approve', [
-      contributePoolContract.address,
-      ethers.constants.MaxUint256,
-    ])
-    const receipt = await tx.wait()
-    return receipt.status
-  }, [bep20Contract, contributePoolContract, callWithGasPrice])
+  const [isApprovedCtbToken, setIsApprovedCtbToken] = useState(false)
+  const [isApprovedDfh, setIsApprovedDfh] = useState(false)
 
-  const fetchApproveBEP20 = useCallback(async () => {
+  const handleApproveCtbToken = useCallback(async () => {
+    console.log(`I'm here: handleApproveCtbToken`)
+    await callWithGasPrice(ctbTokenContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
+  }, [ctbTokenContract, contributePoolContract, callWithGasPrice])
+
+  const handleApproveDFH = useCallback(async () => {
+    console.log(`I'm here: handleApproveDFH`)
+    await callWithGasPrice(dfhContract, 'approve', [contributePoolContract.address, dfhAmount])
+  }, [callWithGasPrice, dfhContract, contributePoolContract.address, dfhAmount])
+
+  const handleApprove = useCallback(async () => {
+    if (!isApprovedCtbToken) {
+      await handleApproveCtbToken()
+    }
+    if (!isApprovedDfh) {
+      await handleApproveDFH()
+    }
+  }, [handleApproveCtbToken, handleApproveDFH, isApprovedCtbToken, isApprovedDfh])
+
+  const fetchApproveCtbToken = useCallback(async () => {
     if (!account) return
-    const approve = await bep20Contract?.allowance(account, contributePoolContract.address)
-    if (approve.toString() === '0') {
-      setIsApprove(false)
+    const approvedCtbTokenAmount: ethers.BigNumber = await ctbTokenContract?.allowance(
+      account,
+      contributePoolContract.address,
+    )
+    if (approvedCtbTokenAmount.toString() === '0') {
+      setIsApprovedCtbToken(false)
       return
     }
-    setIsApprove(true)
-  }, [account, contributePoolContract.address, bep20Contract])
+    setIsApprovedCtbToken(true)
+  }, [account, contributePoolContract.address, ctbTokenContract])
+
+  const fetchApproveDfh = useCallback(async () => {
+    if (!account) return
+    const approvedDfhAmount: ethers.BigNumber = await dfhContract?.allowance(account, contributePoolContract.address)
+    if (approvedDfhAmount.lt(dfhAmount)) {
+      setIsApprovedDfh(false)
+      return
+    }
+    setIsApprovedDfh(true)
+  }, [account, contributePoolContract.address, dfhAmount, dfhContract])
 
   useEffect(() => {
-    fetchApproveBEP20()
-  }, [fetchApproveBEP20, currentBlock])
+    fetchApproveCtbToken()
+    fetchApproveDfh()
+  }, [fetchApproveCtbToken, fetchApproveDfh, currentBlock])
 
-  return { onApprove: handleApprove, isApproved: isApprove }
+  return useMemo(
+    () => ({ onApprove: handleApprove, isApprovedCtbToken, isApprovedDfh }),
+    [handleApprove, isApprovedCtbToken, isApprovedDfh],
+  )
 }
 
 export default useApprovePool

@@ -1,11 +1,12 @@
 import { useContributePoolContract } from 'hooks/useContract'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
 
 export interface UserInfo {
   amount: ethers.BigNumber
   receivedAmount: ethers.BigNumber
+  isStakingDfh: boolean
 }
 
 export default function useUserInfo(poolId: number): [UserInfo | undefined, () => void] {
@@ -28,6 +29,7 @@ export default function useUserInfo(poolId: number): [UserInfo | undefined, () =
           setUserInfo({
             amount: newUserInfo.amount,
             receivedAmount: newUserInfo.receivedAmount,
+            isStakingDfh: newUserInfo.isStakingDfh,
           })
         }
         isFetching.current = false
@@ -37,5 +39,5 @@ export default function useUserInfo(poolId: number): [UserInfo | undefined, () =
     fetchData()
   }, [count, account, poolId, contributePoolContract])
 
-  return [userInfo, refetchUserInfo]
+  return useMemo(() => [userInfo, refetchUserInfo], [userInfo, refetchUserInfo])
 }

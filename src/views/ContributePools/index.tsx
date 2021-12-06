@@ -6,6 +6,7 @@ import useContributePoolInfos, { PoolInfo, PoolStatus } from 'views/ContributePo
 import TabButtons from 'views/ContributePools/TabButtons'
 import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
+import useMyPoolIds from 'views/ContributePools/hooks/useMyPoolIds'
 
 const CardWrapper = styled(Box)`
   grid-gap: 16px;
@@ -58,8 +59,11 @@ const Filters = styled(Flex)`
 export default function ContributePool() {
   const { t } = useTranslation()
   const poolInfos = useContributePoolInfos()
+  const myPoolIds = useMyPoolIds()
   const location = useLocation()
   const [filteredPoolInfos, setFilteredPoolInfos] = useState<PoolInfo[]>()
+
+  console.log(`x`, poolInfos && myPoolIds ? poolInfos.filter((pool) => myPoolIds.includes(pool.id)) : undefined)
 
   useEffect(() => {
     switch (location.pathname) {
@@ -72,16 +76,19 @@ export default function ContributePool() {
       case '/pools/closed':
         setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CLOSED) : [])
         break
+      case '/pools/my-pools':
+        setFilteredPoolInfos(poolInfos && myPoolIds ? poolInfos.filter((pool) => myPoolIds.includes(pool.id)) : [])
+        break
       default:
         setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING) : [])
         break
     }
-  }, [location.pathname, poolInfos])
+  }, [location.pathname, poolInfos, myPoolIds])
 
   return (
     <Box>
       <Banner>
-        <Box>{t('Bất động sản')}</Box>
+        <Box>{t('Real estate')}</Box>
       </Banner>
       <Filters>
         <TabButtons />

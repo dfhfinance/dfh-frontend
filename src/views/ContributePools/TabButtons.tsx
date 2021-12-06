@@ -31,14 +31,17 @@ const TabButtons: React.FC = () => {
   return (
     <Wrapper>
       <ButtonMenu activeIndex={activeIndex} scale="sm" variant="subtle">
-        <ButtonMenuItem as={Link} to={`${url}`}>
+        <ButtonMenuItem as={Link} to={`${url}`} style={{ textAlign: 'center' }}>
           {t('Live')}
         </ButtonMenuItem>
-        <ButtonMenuItem as={Link} to={`${url}/end-contribution`}>
+        <ButtonMenuItem as={Link} to={`${url}/end-contribution`} style={{ textAlign: 'center' }}>
           {t('Finished')}
         </ButtonMenuItem>
-        <ButtonMenuItem as={Link} to={`${url}/closed`}>
+        <ButtonMenuItem as={Link} to={`${url}/closed`} style={{ textAlign: 'center' }}>
           {t('Closed')}
+        </ButtonMenuItem>
+        <ButtonMenuItem as={Link} to={`${url}/my-pools`} style={{ textAlign: 'center' }}>
+          {t('Staked')}
         </ButtonMenuItem>
       </ButtonMenu>
     </Wrapper>

@@ -10,6 +10,8 @@ export enum PoolStatus {
 }
 
 export interface PoolInfo {
+  id: number
+
   ctbToken: string
   withdrawFee: number
   ctbMin: ethers.BigNumber
@@ -37,6 +39,8 @@ export default function useContributePoolInfos(): PoolInfo[] {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (isFetching.current) return
+
       isFetching.current = true
       const numberOfPoolsBn = await contributePoolContract.poolLength()
       const numberOfPools: number = numberOfPoolsBn.toNumber()
@@ -45,9 +49,11 @@ export default function useContributePoolInfos(): PoolInfo[] {
         promises.push(contributePoolContract.getPoolInfo(i))
       }
       const responses = await Promise.all(promises)
-      const newPoolInfos = responses.map((response): PoolInfo => {
+      const newPoolInfos = responses.map((response, index): PoolInfo => {
         const res = { ...response[0], ...response[1] }
         return {
+          id: index,
+
           ctbToken: res.ctbToken,
           withdrawFee: res.withdrawFee,
           ctbMin: res.ctbMin,

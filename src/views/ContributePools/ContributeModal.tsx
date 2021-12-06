@@ -16,7 +16,7 @@ interface StakeModalProps {
   onDismiss?: () => void
 }
 
-const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = '', onConfirm, onDismiss }) => {
+const ContributeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = '', onConfirm, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
 
@@ -104,4 +104,4 @@ const StakeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol = ''
   )
 }
 
-export default StakeModal
+export default ContributeModal

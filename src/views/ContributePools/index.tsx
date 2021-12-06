@@ -1,8 +1,11 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { Box, Flex, Text } from '@dfh-finance/uikit'
 import styled from 'styled-components'
 import ContributePoolCard from 'views/ContributePools/ContributePoolCard'
-import useContributePoolInfos from 'views/ContributePools/hooks/useContributedPoolInfos'
+import useContributePoolInfos, { PoolInfo, PoolStatus } from 'views/ContributePools/hooks/useContributedPoolInfos'
+import TabButtons from 'views/ContributePools/TabButtons'
+import { useLocation, useRouteMatch } from 'react-router-dom'
+import { useTranslation } from 'contexts/Localization'
 
 const CardWrapper = styled(Box)`
   grid-gap: 16px;
@@ -11,15 +14,15 @@ const CardWrapper = styled(Box)`
   align-items: flex-start;
   flex-wrap: wrap;
   margin: 0 auto;
-  padding: 16px;
+  padding: 36px 16px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 16px 36px;
+    padding: 36px;
     grid-gap: 36px;
   }
 
   ${({ theme }) => theme.mediaQueries.md} {
-    padding: 16px 64px;
+    padding: 48px 64px;
   }
 `
 
@@ -34,6 +37,7 @@ const Banner = styled(Flex)`
   background-repeat: no-repeat;
   font-size: 30px;
   font-weight: 700;
+  border-bottom: ${({ theme }) => `2px solid ${theme.colors.primary}`};
 
   ${({ theme }) => theme.mediaQueries.xs} {
     background-image: url('/images/contribute-background-tablet.png');
@@ -46,17 +50,45 @@ const Banner = styled(Flex)`
   }
 `
 
+const Filters = styled(Flex)`
+  margin-top: 16px;
+  justify-content: center;
+`
+
 export default function ContributePool() {
+  const { t } = useTranslation()
   const poolInfos = useContributePoolInfos()
+  const location = useLocation()
+  const [filteredPoolInfos, setFilteredPoolInfos] = useState<PoolInfo[]>()
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/pools':
+        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING) : [])
+        break
+      case '/pools/end-contribution':
+        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.END_CONTRIBUTION) : [])
+        break
+      case '/pools/closed':
+        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CLOSED) : [])
+        break
+      default:
+        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING) : [])
+        break
+    }
+  }, [location.pathname, poolInfos])
 
   return (
     <Box>
       <Banner>
-        <Box>Bất động sản</Box>
+        <Box>{t('Bất động sản')}</Box>
       </Banner>
+      <Filters>
+        <TabButtons />
+      </Filters>
       <CardWrapper>
-        {poolInfos &&
-          poolInfos.map((poolInfo, index) => (
+        {filteredPoolInfos &&
+          filteredPoolInfos.map((poolInfo, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <ContributePoolCard key={index} id={index} poolInfo={poolInfo} />
           ))}

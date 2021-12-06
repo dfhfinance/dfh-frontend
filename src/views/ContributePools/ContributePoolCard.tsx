@@ -15,7 +15,7 @@ import usePendingProfit from 'views/ContributePools/hooks/usePendingProfit'
 import useUserInfo from 'views/ContributePools/hooks/useUserInfo'
 import useClaimProfit from 'views/ContributePools/hooks/useClaimProfit'
 import useStakePool from 'views/ContributePools/hooks/useStakePool'
-import StakeModal from 'views/ContributePools/StakeModal'
+import ContributeModal from 'views/ContributePools/ContributeModal'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { TokenImage } from 'components/TokenImage'
@@ -190,7 +190,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   }, [status, stakeTimeRemaining, setStakeTimeRemaining, endCampaignTimestamp, isWindowVisible])
 
   const [onPresentStakeModal] = useModal(
-    <StakeModal
+    <ContributeModal
       min={ethersToBigNumber(ctbMin)}
       max={contributedTokenBalance}
       decimals={ctbToken?.decimals}

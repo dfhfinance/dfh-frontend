@@ -63,8 +63,6 @@ export default function ContributePool() {
   const location = useLocation()
   const [filteredPoolInfos, setFilteredPoolInfos] = useState<PoolInfo[]>()
 
-  console.log(`x`, poolInfos && myPoolIds ? poolInfos.filter((pool) => myPoolIds.includes(pool.id)) : undefined)
-
   useEffect(() => {
     switch (location.pathname) {
       case '/pools':

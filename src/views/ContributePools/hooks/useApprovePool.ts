@@ -24,12 +24,10 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
   const refreshUserInfo = userInfo[1]
 
   const handleApproveCtbToken = useCallback(async () => {
-    console.log(`I'm here: handleApproveCtbToken`)
     await callWithGasPrice(ctbTokenContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
   }, [ctbTokenContract, contributePoolContract, callWithGasPrice])
 
   const handleApproveDFH = useCallback(async () => {
-    console.log(`I'm here: handleApproveDFH`)
     await callWithGasPrice(dfhContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
   }, [callWithGasPrice, dfhContract, contributePoolContract.address])
 

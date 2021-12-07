@@ -54,13 +54,17 @@ export interface ContributedToken {
   decimals: number
 }
 
-const toHHMMSS = (milliseconds: number) => {
-  const secs = Math.floor(milliseconds / 1000)
-  const hours = Math.floor(secs / 3600)
-  const minutes = Math.floor(secs / 60) % 60
-  const seconds = secs % 60
+const toDDHHMMSS = (milliseconds: number) => {
+  let secs = Math.floor(milliseconds / 1000)
 
-  return [hours, minutes, seconds].map((v) => (v < 10 ? `0${v}` : v)).join(':')
+  const days = Math.floor(secs / 3600 / 24)
+  secs -= days * 24 * 3600
+  const hours = Math.floor(secs / 3600)
+  secs -= hours * 3600
+  const minutes = Math.floor(secs / 60)
+  secs -= minutes * 60
+
+  return [days, hours, minutes, secs].map((v) => (v < 10 ? `0${v}` : v)).join(':')
 }
 
 const PoolImage = styled(Box)<{ image: string }>`
@@ -88,10 +92,11 @@ const PoolInformation = styled(Box)`
   padding: 8px 16px;
 `
 
-export default function ContributePoolCard({ id, poolInfo }: { id: number; poolInfo: PoolInfo }) {
+export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo }) {
   const { t } = useTranslation()
   const { account, chainId = +process.env.REACT_APP_CHAIN_ID } = useActiveWeb3React()
   const {
+    id,
     ctbToken: ctbTokenAddress,
     withdrawFee,
     ctbMin,
@@ -164,7 +169,7 @@ export default function ContributePoolCard({ id, poolInfo }: { id: number; poolI
   const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
 
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
-  const formattedStakeTimeRemaining = toHHMMSS(stakeTimeRemaining)
+  const formattedStakeTimeRemaining = toDDHHMMSS(stakeTimeRemaining)
   const isWindowVisible = useIsWindowVisible()
   const timer = useRef(null)
 

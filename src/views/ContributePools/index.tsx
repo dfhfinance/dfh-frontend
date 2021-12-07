@@ -95,7 +95,7 @@ export default function ContributePool() {
         {filteredPoolInfos &&
           filteredPoolInfos.map((poolInfo, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <ContributePoolCard key={index} id={index} poolInfo={poolInfo} />
+            <ContributePoolCard key={poolInfo.id} poolInfo={poolInfo} />
           ))}
       </CardWrapper>
     </Box>

@@ -7,7 +7,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ethersToBigNumber } from 'utils/bigNumber'
-import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import { formatBigNumber, formatNumber, getBalanceAmount } from 'utils/formatBalance'
 import useApprovePool from 'views/ContributePools/hooks/useApprovePool'
 import { PoolInfo, PoolStatus } from 'views/ContributePools/hooks/useContributedPoolInfos'
 import useContributedToken from 'views/ContributePools/hooks/useContributedToken'
@@ -20,6 +20,7 @@ import useTokenBalance from 'hooks/useTokenBalance'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { TokenImage } from 'components/TokenImage'
 import { Token } from '@dfh-finance/sdk'
+import BigNumber from 'bignumber.js'
 
 const StyledCard = styled(Card)`
   width: 450px;
@@ -196,7 +197,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
 
   const [onPresentStakeModal] = useModal(
     <ContributeModal
-      min={ethersToBigNumber(ctbMin)}
+      min={ctbToken ? getBalanceAmount(ethersToBigNumber(ctbMin), ctbToken.decimals) : new BigNumber('0')}
       max={contributedTokenBalance}
       decimals={ctbToken?.decimals}
       symbol={ctbToken?.symbol}

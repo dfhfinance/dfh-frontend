@@ -32,8 +32,8 @@ const ContributeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol
   }, [])
 
   const fullBalance = useMemo(() => {
-    return getFullDisplayBalance(max)
-  }, [max])
+    return getFullDisplayBalance(max, decimals)
+  }, [max, decimals])
 
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -59,6 +59,7 @@ const ContributeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol
         onChange={handleChange}
         max={fullBalance}
         symbol={symbol}
+        decimals={decimals}
         inputTitle={t('Stake')}
       />
       <Flex mt="24px" alignItems="center" justifyContent="space-between">

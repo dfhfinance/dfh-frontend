@@ -1,4 +1,19 @@
-import { Box, Button, Card, Flex, Link, Slider, Text, useModal } from '@dfh-finance/uikit'
+import {
+  Box,
+  Button,
+  Card,
+  CurrencyIcon,
+  EarnIcon,
+  Flex,
+  Link,
+  LoginIcon,
+  LogoutIcon,
+  Slider,
+  Text,
+  TrophyIcon,
+  useModal,
+  WaitIcon,
+} from '@dfh-finance/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { testnetTokens } from 'config/constants/tokens'
@@ -38,10 +53,15 @@ const StyledCard = styled(Card)`
   }
 `
 
-const Row: React.FC<{ field: string; value: string }> = ({ field, value }) => {
+const Row: React.FC<{ icon: React.ReactNode; field: string; value: string }> = ({ icon, field, value }) => {
   return (
     <Flex justifyContent="space-between">
-      <Text ellipsis>{field}</Text>
+      <Flex>
+        {icon}
+        <Text ellipsis ml="4px">
+          {field}
+        </Text>
+      </Flex>
       <Text bold ellipsis textAlign="right" style={{ flex: '1' }}>
         {value}
       </Text>
@@ -224,14 +244,14 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
         <Text color="secondary" textTransform="uppercase" bold mb="4px">
           {t('Real Estate Information')}
         </Text>
-        <Row field={t('Investment price')} value={formattedExpectInput} />
+        <Row icon={<LoginIcon />} field={t('Investment price')} value={formattedExpectInput} />
         {showExpandableSection && (
           <>
-            <Row field={t('Estimated selling price')} value={formattedExpectOutput} />
-            <Row field={t('Expected profit')} value={expectProfitInPercentage} />
-            <Row field={t('Total mobilized capital')} value={formattedTotalStakeMax} />
-            <Row field={t('Deposited DFH amount')} value={formattedDFHAmount} />
-            <Row field={t('Remaining deposit time')} value={formattedStakeTimeRemaining} />
+            <Row icon={<LogoutIcon />} field={t('Estimated selling price')} value={formattedExpectOutput} />
+            <Row icon={<EarnIcon />} field={t('Expected profit')} value={expectProfitInPercentage} />
+            <Row icon={<TrophyIcon />} field={t('Total mobilized capital')} value={formattedTotalStakeMax} />
+            <Row icon={<CurrencyIcon />} field={t('Deposited DFH amount')} value={formattedDFHAmount} />
+            <Row icon={<WaitIcon />} field={t('Remaining deposit time')} value={formattedStakeTimeRemaining} />
             <Text textAlign="center" fontSize="16px" mt="16px">
               {t("Pool's total assets")}
             </Text>

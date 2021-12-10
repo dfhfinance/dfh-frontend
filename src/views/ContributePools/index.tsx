@@ -64,9 +64,14 @@ export default function ContributePool() {
   const [filteredPoolInfos, setFilteredPoolInfos] = useState<PoolInfo[]>()
 
   useEffect(() => {
+    const now = Date.now()
     switch (location.pathname) {
       case '/pools':
-        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING) : [])
+        setFilteredPoolInfos(
+          poolInfos
+            ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING && pool.endCtbTime.gt(now))
+            : [],
+        )
         break
       case '/pools/end-contribution':
         setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.END_CONTRIBUTION) : [])

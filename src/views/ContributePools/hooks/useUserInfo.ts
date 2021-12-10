@@ -2,6 +2,7 @@ import { useContributePoolContract } from 'hooks/useContract'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
+import { useBlock } from 'state/block/hooks'
 
 export interface UserInfo {
   amount: ethers.BigNumber
@@ -15,6 +16,7 @@ export default function useUserInfo(poolId: number): [UserInfo | undefined, () =
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const isFetching = useRef(false)
   const [count, setCount] = useState(1)
+  const { currentBlock } = useBlock()
 
   const refetchUserInfo = useCallback(() => {
     setCount((prev) => prev + 1)
@@ -37,7 +39,7 @@ export default function useUserInfo(poolId: number): [UserInfo | undefined, () =
     }
 
     fetchData()
-  }, [count, account, poolId, contributePoolContract])
+  }, [count, account, poolId, contributePoolContract, currentBlock])
 
   return useMemo(() => [userInfo, refetchUserInfo], [userInfo, refetchUserInfo])
 }

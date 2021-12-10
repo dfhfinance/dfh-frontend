@@ -28,6 +28,18 @@
       },
       {
         "indexed": false,
+        "internalType": "string",
+        "name": "link",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "image",
+        "type": "string"
+      },
+      {
+        "indexed": false,
         "internalType": "uint16",
         "name": "withdrawFee",
         "type": "uint16"
@@ -197,6 +209,25 @@
       }
     ],
     "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakeDfh",
     "type": "event"
   },
   {
@@ -386,7 +417,7 @@
     "name": "dfhToken",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
         "type": "address"
       }
@@ -781,6 +812,19 @@
       }
     ],
     "name": "setPoolImageLink",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "stakeDfh",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

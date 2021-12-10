@@ -16,10 +16,10 @@ import {
 } from '@dfh-finance/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { testnetTokens } from 'config/constants/tokens'
+import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { formatBigNumber, formatNumber, getBalanceAmount } from 'utils/formatBalance'
@@ -36,6 +36,8 @@ import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { TokenImage } from 'components/TokenImage'
 import { Token } from '@dfh-finance/sdk'
 import BigNumber from 'bignumber.js'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useContributePoolContract } from 'hooks/useContract'
 
 const StyledCard = styled(Card)`
   width: 450px;
@@ -155,7 +157,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
       ? `${formatBigNumber(pendingProfit, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
       : 'Loading...'
   const userInfo = useUserInfo(id)
-  const { amount: stakedAmount, receivedAmount } = userInfo[0] ?? {}
+  const { amount: stakedAmount, receivedAmount, isStakingDfh } = userInfo[0] ?? {}
   const refetchUserInfo = userInfo[1]
   const formattedStakedAmount =
     ctbToken && stakedAmount
@@ -181,14 +183,18 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
       : 0
   const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
+  const dfhBalance = useTokenBalance(tokens.dfh.address).balance
   const isConnected = !!account
   const isClaimButtonDisabled =
     Date.now() < endCampaignTimestamp || status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
+  const isStakeDFHButtonDisabled =
+    Date.now() > endCampaignTimestamp ||
+    status !== PoolStatus.CONTRIBUTING ||
+    totalCtb.gte(totalCtbMax) ||
+    dfhBalance.lt(ethersToBigNumber(dfhAmount))
   const isStakeButtonDisabled =
     Date.now() > endCampaignTimestamp || status !== PoolStatus.CONTRIBUTING || totalCtb.gte(totalCtbMax)
-
-  const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
-
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
   const formattedStakeTimeRemaining = toDDHHMMSS(stakeTimeRemaining)
   const isWindowVisible = useIsWindowVisible()
@@ -225,6 +231,13 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
     />,
   )
 
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const contributePoolContract = useContributePoolContract()
+  const onStakeDFH = useCallback(async () => {
+    const tx = await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
+    console.log(`tx`, tx)
+  }, [callWithGasPrice, contributePoolContract, id])
+
   return (
     <StyledCard>
       <Link target="_blank" href={link} style={{ display: 'block', width: '100%' }}>
@@ -234,7 +247,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
         <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>
         {ctbToken && (
           <TokenImage
-            token={ctbToken ? new Token(chainId, ctbToken.address, ctbToken.decimals) : testnetTokens.dfh}
+            token={ctbToken ? new Token(chainId, ctbToken.address, ctbToken.decimals) : tokens.dfh}
             width={40}
             height={40}
           />
@@ -309,9 +322,17 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
               <Text fontSize="24px" bold>
                 {formattedStakedAmount}
               </Text>
-              <Button variant="primary" disabled={isStakeButtonDisabled} onClick={onPresentStakeModal}>
-                {t('Stake')}
-              </Button>
+              {isStakingDfh ? (
+                <Button variant="primary" disabled={isStakeButtonDisabled} onClick={onPresentStakeModal}>
+                  {t('Stake')}
+                </Button>
+              ) : (
+                <Button variant="primary" disabled={isStakeDFHButtonDisabled} onClick={onStakeDFH}>
+                  {dfhBalance.lt(ethersToBigNumber(dfhAmount))
+                    ? `${t('Insufficient %symbol% balance', { symbol: 'DFH' })}`
+                    : `${t('Stake')} DFH`}
+                </Button>
+              )}
             </Flex>
           </>
         )}

@@ -235,13 +235,24 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
   const contributePoolContract = useContributePoolContract()
   const onStakeDFH = useCallback(async () => {
     const tx = await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
-    console.log(`tx`, tx)
   }, [callWithGasPrice, contributePoolContract, id])
+
+  const [fallbackImage, setFallbackImage] = useState<string>()
 
   return (
     <StyledCard>
       <Link target="_blank" href={link} style={{ display: 'block', width: '100%' }}>
-        <PoolImage image={image} />
+        <img
+          src={fallbackImage ?? image}
+          style={{ width: '0', height: '0', display: 'block' }}
+          onError={() => {
+            setFallbackImage(
+              'https://image.freepik.com/free-photo/empty-door-living-room-interior-background_1339-4844.jpg',
+            )
+          }}
+          alt="hidden"
+        />
+        <PoolImage image={fallbackImage ?? image} />
       </Link>
       <PoolTitle>
         <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>

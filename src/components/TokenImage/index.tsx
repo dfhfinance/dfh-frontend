@@ -4,7 +4,7 @@ import {
   TokenPairImageProps as UIKitTokenPairImageProps,
   TokenImage as UIKitTokenImage,
   ImageProps,
-} from '@dfh-finance/uikit'
+} from 'components/TokenImage/Image'
 import tokens, { mainnetTokens, testnetTokens } from 'config/constants/tokens'
 import { Token } from '@dfh-finance/sdk'
 

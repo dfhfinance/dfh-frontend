@@ -287,10 +287,11 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
 
   const [fallbackImage, setFallbackImage] = useState<string>()
 
+  const isTransferred = status === PoolStatus.CLOSED
+
   const now = Date.now()
-  const isContributing = status === PoolStatus.CONTRIBUTING && endCtbTime.gt(now)
-  const isEndContribution = status === PoolStatus.END_CONTRIBUTION
-  const isClosed = status === PoolStatus.CLOSED
+  const isContributedSuccessfully =
+    now > endCampaignTimestamp || status === PoolStatus.END_CONTRIBUTION || totalCtb.gte(totalCtbMax)
 
   return (
     <StyledCard>
@@ -307,8 +308,8 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
         />
         <PoolImage image={fallbackImage ?? image} />
         <PoolImageLayer
-          show={!isContributing}
-          text={isEndContribution ? t('Contributed successfully') : t('Transferred')}
+          show={isContributedSuccessfully || isTransferred}
+          text={isTransferred ? t('Transferred') : t('Contributed successfully')}
         />
       </Link>
       <PoolTitle>

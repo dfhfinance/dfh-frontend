@@ -26,23 +26,36 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
   const [isApproving, setIsApproving] = useState(false)
 
   const handleApproveCtbToken = useCallback(async () => {
-    await callWithGasPrice(ctbTokenContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
+    const tx = await callWithGasPrice(ctbTokenContract, 'approve', [
+      contributePoolContract.address,
+      ethers.constants.MaxUint256,
+    ])
+    return tx
   }, [ctbTokenContract, contributePoolContract, callWithGasPrice])
 
   const handleApproveDFH = useCallback(async () => {
-    await callWithGasPrice(dfhContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
+    const tx = await callWithGasPrice(dfhContract, 'approve', [
+      contributePoolContract.address,
+      ethers.constants.MaxUint256,
+    ])
+    return tx
   }, [callWithGasPrice, dfhContract, contributePoolContract.address])
 
   const handleApprove = useCallback(async () => {
     try {
       setIsApproving(true)
+      let tx1: ethers.providers.TransactionResponse | undefined
+      let tx2: ethers.providers.TransactionResponse | undefined
       if (!isApprovedCtbToken) {
-        await handleApproveCtbToken()
+        tx1 = await handleApproveCtbToken()
       }
       if (!isApprovedDfh) {
-        await handleApproveDFH()
+        tx2 = await handleApproveDFH()
       }
-    } finally {
+      if (tx1) await tx1.wait()
+      if (tx2) await tx2.wait()
+      setIsApproving(false)
+    } catch {
       setIsApproving(false)
     }
   }, [handleApproveCtbToken, handleApproveDFH, isApprovedCtbToken, isApprovedDfh])

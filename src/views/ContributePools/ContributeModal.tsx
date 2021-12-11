@@ -3,11 +3,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Flex, Modal, Text } from '@dfh-finance/uikit'
 import { ModalActions, ModalInput } from 'components/Modal'
 import { useTranslation } from 'contexts/Localization'
-import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
+import { formatBigNumber, getBalanceAmount, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
+import ethers from 'ethers'
 
 interface StakeModalProps {
-  min: BigNumber
+  min: ethers.BigNumber
   max: BigNumber
   decimals?: number
   symbol?: string
@@ -48,7 +49,7 @@ const ContributeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-  const formattedMin = getFullDisplayBalance(min, decimals ?? 18, Math.min(6, decimals))
+  const formattedMin = formatBigNumber(min, decimals ?? 18)
 
   return (
     <Modal title={t('Stake')} onDismiss={onDismiss}>
@@ -76,7 +77,7 @@ const ContributeModal: React.FC<StakeModalProps> = ({ min, max, decimals, symbol
         </Button>
         <Button
           width="100%"
-          disabled={pendingTx || !valBn || valBn.isLessThan(min) || valBn.isGreaterThan(max)}
+          disabled={pendingTx || !valBn || valBn.isLessThan(min.toString()) || valBn.isGreaterThan(max.toString())}
           onClick={async () => {
             setPendingTx(true)
             try {

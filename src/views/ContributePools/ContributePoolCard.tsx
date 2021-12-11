@@ -38,6 +38,7 @@ import { Token } from '@dfh-finance/sdk'
 import BigNumber from 'bignumber.js'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useContributePoolContract } from 'hooks/useContract'
+import { ethers } from 'ethers'
 
 const StyledCard = styled(Card)`
   width: 450px;
@@ -139,39 +140,49 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
   } = poolInfo
   const { isApprovedCtbToken, isApprovedDfh, onApprove, isApproving } = useApprovePool(id, dfhAmount, ctbTokenAddress)
   const onStake = useStakePool()
-  const onClaim = useClaimProfit()
+  const [isClaiming, onClaim] = useClaimProfit()
   const endCampaignTimestamp = endCtbTime.toNumber()
   const ctbToken = useContributedToken(ctbTokenAddress)
   const formattedExpectInput = `${formatNumber(purchasePrice, 0, 3)} VND`
   const formattedExpectOutput = `${formatNumber(expectedPrice, 0, 3)} VND`
-  const expectProfitInPercentage = `${formatNumber((expectProfit * 100) / purchasePrice, 0, 2)}%`
+  const expectProfitInPercentage = `${formatNumber((expectProfit * 100) / purchasePrice, 0, 6)}%`
   const formattedTotalStakeMax = ctbToken
-    ? `${formatBigNumber(totalCtbMax, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
+    ? `${formatNumber(Number(formatBigNumber(totalCtbMax, ctbToken.decimals, ctbToken.decimals)), 0, 6)} ${
+        ctbToken.symbol
+      }`
     : 'Loading...'
-  const formattedDFHAmount = `${formatBigNumber(dfhAmount, 6, 18)} DFH`
+  const formattedDFHAmount = `${formatNumber(Number(formatBigNumber(dfhAmount, 6, 18)), 0, 6)} DFH`
   const pendingProfit = usePendingProfit(id)
   const formattedPendingProfit =
     !account && ctbToken
       ? `0.0 ${ctbToken.symbol}`
       : ctbToken && pendingProfit
-      ? `${formatBigNumber(pendingProfit, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
+      ? `${formatNumber(Number(formatBigNumber(pendingProfit, ctbToken.decimals, ctbToken.decimals)), 0, 6)} ${
+          ctbToken.symbol
+        }`
       : 'Loading...'
   const userInfo = useUserInfo(id)
   const { amount: stakedAmount, receivedAmount, isStakingDfh } = userInfo[0] ?? {}
   const refetchUserInfo = userInfo[1]
   const formattedStakedAmount =
     ctbToken && stakedAmount
-      ? `${formatBigNumber(stakedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
+      ? `${formatNumber(Number(formatBigNumber(stakedAmount, ctbToken.decimals, ctbToken.decimals)), 0, 6)} ${
+          ctbToken.symbol
+        }`
       : 'Loading...'
   const formattedReceivedAmount =
     !account && ctbToken
       ? `0.0 ${ctbToken.symbol}`
       : ctbToken && receivedAmount
-      ? `${formatBigNumber(receivedAmount, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
+      ? `${formatNumber(Number(formatBigNumber(receivedAmount, ctbToken.decimals, ctbToken.decimals)), 0, 6)} ${
+          ctbToken.symbol
+        }`
       : 'Loading...'
   const formattedTotalStaked =
     ctbToken && totalCtb
-      ? `${formatBigNumber(totalCtb, ctbToken.decimals, ctbToken.decimals)} ${ctbToken.symbol}`
+      ? `${formatNumber(Number(formatBigNumber(totalCtb, ctbToken.decimals, ctbToken.decimals)), 0, 6)} ${
+          ctbToken.symbol
+        }`
       : 'Loading...'
   const totalStakedBigNumber = totalCtb && ethersToBigNumber(totalCtb)
   const totalStakeMaxBigNumber = totalCtbMax && ethersToBigNumber(totalCtbMax)
@@ -181,12 +192,13 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
         ? 100
         : totalStakedBigNumber.div(totalStakeMaxBigNumber).times(100).toNumber()
       : 0
-  const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 2)}%`
+  const formattedTotalStakedInPercentage = `${formatNumber(totalStakedInPercentage, 0, 6)}%`
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
   const dfhBalance = useTokenBalance(tokens.dfh.address).balance
   const isConnected = !!account
-  const isClaimButtonDisabled = status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
+  const isClaimButtonDisabled =
+    status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0') || isClaiming
   const isStakeButtonDisabled =
     Date.now() > endCampaignTimestamp || status !== PoolStatus.CONTRIBUTING || totalCtb.gte(totalCtbMax)
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
@@ -199,8 +211,10 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
   const onStakeDFH = useCallback(async () => {
     setIsStakingDFH(true)
     try {
-      await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
-    } finally {
+      const tx = await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
+      await tx.wait()
+      setIsStakingDFH(false)
+    } catch {
       setIsStakingDFH(false)
     }
   }, [callWithGasPrice, contributePoolContract, id])
@@ -234,7 +248,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
 
   const [onPresentStakeModal] = useModal(
     <ContributeModal
-      min={ctbToken ? getBalanceAmount(ethersToBigNumber(ctbMin), ctbToken.decimals) : new BigNumber('0')}
+      min={ctbToken ? ctbMin : ethers.BigNumber.from('0')}
       max={contributedTokenBalance}
       decimals={ctbToken?.decimals}
       symbol={ctbToken?.symbol}
@@ -316,7 +330,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
             </Text>
           </Box>
           <Button variant="primary" disabled={isClaimButtonDisabled} onClick={() => onClaim(id)}>
-            {t('Claim profit')}
+            {isClaiming ? t('Claiming profit...') : t('Claim profit')}
           </Button>
         </Flex>
         {!isConnected ? (
@@ -353,7 +367,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
                   {dfhBalance.lt(ethersToBigNumber(dfhAmount))
                     ? `${t('Insufficient %symbol% balance', { symbol: 'DFH' })}`
                     : isStakingDFH
-                    ? `${t('Staking')} DFH...`
+                    ? t('Staking DFH...')
                     : `${t('Stake')} DFH`}
                 </Button>
               )}

@@ -41,6 +41,7 @@ import { useContributePoolContract } from 'hooks/useContract'
 import { ethers } from 'ethers'
 
 const StyledCard = styled(Card)`
+  position: relative;
   width: 450px;
   background: white;
   display: flex;
@@ -103,7 +104,35 @@ const PoolImage = styled(Box)<{ image: string }>`
   }
 `
 
+const PoolImageLayer = styled(Box)<{ show: boolean; text: string }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+
+  ${({ show, text }) =>
+    show &&
+    `
+  background: rgba(0, 0, 0, 0.5);
+  &:before {
+    content: '${text}';
+    color: #ffffff;
+    font-size: 22px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  `}
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    height: 200px;
+  }
+`
+
 const PoolTitle = styled(Flex)`
+  isolation: isolate;
   justify-content: space-between;
   align-items: center;
   border-radius: 24px;
@@ -258,6 +287,11 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
 
   const [fallbackImage, setFallbackImage] = useState<string>()
 
+  const now = Date.now()
+  const isContributing = status === PoolStatus.CONTRIBUTING && endCtbTime.gt(now)
+  const isEndContribution = status === PoolStatus.END_CONTRIBUTION
+  const isClosed = status === PoolStatus.CLOSED
+
   return (
     <StyledCard>
       <Link target="_blank" href={link} style={{ display: 'block', width: '100%' }}>
@@ -272,6 +306,10 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
           alt="hidden"
         />
         <PoolImage image={fallbackImage ?? image} />
+        <PoolImageLayer
+          show={!isContributing}
+          text={isEndContribution ? t('Contributed successfully') : t('Transferred')}
+        />
       </Link>
       <PoolTitle>
         <Text fontWeight={700}>{`MS: ${`00${id}`.slice(-3)}`}</Text>

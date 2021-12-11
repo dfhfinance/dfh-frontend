@@ -14,14 +14,11 @@ const TabButtons: React.FC = () => {
     case '/pools':
       activeIndex = 0
       break
-    case '/pools/end-contribution':
+    case '/pools/finished':
       activeIndex = 1
       break
-    case '/pools/closed':
-      activeIndex = 2
-      break
     case '/pools/my-pools':
-      activeIndex = 3
+      activeIndex = 2
       break
     default:
       activeIndex = 0
@@ -34,11 +31,8 @@ const TabButtons: React.FC = () => {
         <ButtonMenuItem as={Link} to={`${url}`} style={{ textAlign: 'center' }}>
           {t('Live')}
         </ButtonMenuItem>
-        <ButtonMenuItem as={Link} to={`${url}/end-contribution`} style={{ textAlign: 'center' }}>
+        <ButtonMenuItem as={Link} to={`${url}/finished`} style={{ textAlign: 'center' }}>
           {t('Finished')}
-        </ButtonMenuItem>
-        <ButtonMenuItem as={Link} to={`${url}/closed`} style={{ textAlign: 'center' }}>
-          {t('Closed')}
         </ButtonMenuItem>
         <ButtonMenuItem as={Link} to={`${url}/my-pools`} style={{ textAlign: 'center' }}>
           {t('Staked')}

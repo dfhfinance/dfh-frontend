@@ -69,14 +69,15 @@ export default function ContributePool() {
       case '/pools':
         setFilteredPoolInfos(
           poolInfos
-            ? poolInfos.filter((pool) => pool.status === PoolStatus.CONTRIBUTING && pool.endCtbTime.gt(now))
+            ? poolInfos.filter(
+                (pool) =>
+                  (pool.status === PoolStatus.CONTRIBUTING && pool.endCtbTime.gt(now)) ||
+                  pool.status === PoolStatus.END_CONTRIBUTION,
+              )
             : [],
         )
         break
-      case '/pools/end-contribution':
-        setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.END_CONTRIBUTION) : [])
-        break
-      case '/pools/closed':
+      case '/pools/finished':
         setFilteredPoolInfos(poolInfos ? poolInfos.filter((pool) => pool.status === PoolStatus.CLOSED) : [])
         break
       case '/pools/my-pools':

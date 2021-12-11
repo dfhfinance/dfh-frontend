@@ -137,7 +137,7 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
     link,
     image,
   } = poolInfo
-  const { isApprovedCtbToken, isApprovedDfh, onApprove } = useApprovePool(id, dfhAmount, ctbTokenAddress)
+  const { isApprovedCtbToken, isApprovedDfh, onApprove, isApproving } = useApprovePool(id, dfhAmount, ctbTokenAddress)
   const onStake = useStakePool()
   const onClaim = useClaimProfit()
   const endCampaignTimestamp = endCtbTime.toNumber()
@@ -186,19 +186,27 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
   const contributedTokenBalance = useTokenBalance(ctbTokenAddress).balance
   const dfhBalance = useTokenBalance(tokens.dfh.address).balance
   const isConnected = !!account
-  const isClaimButtonDisabled =
-    Date.now() < endCampaignTimestamp || status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
-  const isStakeDFHButtonDisabled =
-    Date.now() > endCampaignTimestamp ||
-    status !== PoolStatus.CONTRIBUTING ||
-    totalCtb.gte(totalCtbMax) ||
-    dfhBalance.lt(ethersToBigNumber(dfhAmount))
+  const isClaimButtonDisabled = status === PoolStatus.CONTRIBUTING || !pendingProfit || pendingProfit.eq('0')
   const isStakeButtonDisabled =
     Date.now() > endCampaignTimestamp || status !== PoolStatus.CONTRIBUTING || totalCtb.gte(totalCtbMax)
   const [stakeTimeRemaining, setStakeTimeRemaining] = useState<number>(0)
   const formattedStakeTimeRemaining = toDDHHMMSS(stakeTimeRemaining)
   const isWindowVisible = useIsWindowVisible()
   const timer = useRef(null)
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const contributePoolContract = useContributePoolContract()
+  const [isStakingDFH, setIsStakingDFH] = useState(false)
+  const onStakeDFH = useCallback(async () => {
+    setIsStakingDFH(true)
+    await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
+    setIsStakingDFH(false)
+  }, [callWithGasPrice, contributePoolContract, id])
+  const isStakeDFHButtonDisabled =
+    Date.now() > endCampaignTimestamp ||
+    status !== PoolStatus.CONTRIBUTING ||
+    totalCtb.gte(totalCtbMax) ||
+    dfhBalance.lt(ethersToBigNumber(dfhAmount)) ||
+    isStakingDFH
 
   useEffect(() => {
     if (isWindowVisible) {
@@ -230,12 +238,6 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
       onConfirm={(amount) => onStake(id, amount, ctbToken, refetchUserInfo)}
     />,
   )
-
-  const { callWithGasPrice } = useCallWithGasPrice()
-  const contributePoolContract = useContributePoolContract()
-  const onStakeDFH = useCallback(async () => {
-    const tx = await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
-  }, [callWithGasPrice, contributePoolContract, id])
 
   const [fallbackImage, setFallbackImage] = useState<string>()
 
@@ -317,11 +319,17 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
         {!isConnected ? (
           <ConnectWalletButton width="100%" />
         ) : !isApprovedCtbToken || !isApprovedDfh ? (
-          <Button variant="primary" width="100%" onClick={onApprove}>
+          <Button variant="primary" width="100%" onClick={onApprove} disabled={isApproving}>
             {!isApprovedCtbToken && !isApprovedDfh
-              ? t('Enable Contract and DFH')
+              ? isApproving
+                ? t('Enabling Contract and DFH...')
+                : t('Enable Contract and DFH')
               : !isApprovedCtbToken
-              ? t('Enable Contract')
+              ? isApproving
+                ? t('Enabling Contract...')
+                : t('Enable Contract')
+              : isApproving
+              ? t('Enabling DFH...')
               : t('Enable DFH')}
           </Button>
         ) : (
@@ -341,6 +349,8 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
                 <Button variant="primary" disabled={isStakeDFHButtonDisabled} onClick={onStakeDFH}>
                   {dfhBalance.lt(ethersToBigNumber(dfhAmount))
                     ? `${t('Insufficient %symbol% balance', { symbol: 'DFH' })}`
+                    : isStakingDFH
+                    ? `${t('Staking')} DFH...`
                     : `${t('Stake')} DFH`}
                 </Button>
               )}

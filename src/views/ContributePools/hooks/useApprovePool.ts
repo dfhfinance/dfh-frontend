@@ -23,6 +23,8 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
   const { isStakingDfh = false } = userInfo[0] ?? {}
   const refreshUserInfo = userInfo[1]
 
+  const [isApproving, setIsApproving] = useState(false)
+
   const handleApproveCtbToken = useCallback(async () => {
     await callWithGasPrice(ctbTokenContract, 'approve', [contributePoolContract.address, ethers.constants.MaxUint256])
   }, [ctbTokenContract, contributePoolContract, callWithGasPrice])
@@ -32,11 +34,17 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
   }, [callWithGasPrice, dfhContract, contributePoolContract.address])
 
   const handleApprove = useCallback(async () => {
-    if (!isApprovedCtbToken) {
-      await handleApproveCtbToken()
-    }
-    if (!isApprovedDfh) {
-      await handleApproveDFH()
+    try {
+      setIsApproving(true)
+      if (!isApprovedCtbToken) {
+        await handleApproveCtbToken()
+      }
+      if (!isApprovedDfh) {
+        await handleApproveDFH()
+      }
+      setIsApproving(false)
+    } catch {
+      setIsApproving(false)
     }
   }, [handleApproveCtbToken, handleApproveDFH, isApprovedCtbToken, isApprovedDfh])
 
@@ -71,11 +79,11 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
     fetchApproveCtbToken()
     fetchApproveDfh()
     refreshUserInfo()
-  }, [fetchApproveCtbToken, fetchApproveDfh, currentBlock, refreshUserInfo])
+  }, [fetchApproveCtbToken, fetchApproveDfh, refreshUserInfo, currentBlock])
 
   return useMemo(
-    () => ({ onApprove: handleApprove, isApprovedCtbToken, isApprovedDfh }),
-    [handleApprove, isApprovedCtbToken, isApprovedDfh],
+    () => ({ onApprove: handleApprove, isApprovedCtbToken, isApprovedDfh, isApproving }),
+    [handleApprove, isApprovedCtbToken, isApprovedDfh, isApproving],
   )
 }
 

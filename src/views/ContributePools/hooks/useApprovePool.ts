@@ -42,8 +42,7 @@ const useApprovePool = (poolId: number, dfhAmount: ethers.BigNumber, ctbTokenAdd
       if (!isApprovedDfh) {
         await handleApproveDFH()
       }
-      setIsApproving(false)
-    } catch {
+    } finally {
       setIsApproving(false)
     }
   }, [handleApproveCtbToken, handleApproveDFH, isApprovedCtbToken, isApprovedDfh])

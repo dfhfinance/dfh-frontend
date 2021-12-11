@@ -198,8 +198,11 @@ export default function ContributePoolCard({ poolInfo }: { poolInfo: PoolInfo })
   const [isStakingDFH, setIsStakingDFH] = useState(false)
   const onStakeDFH = useCallback(async () => {
     setIsStakingDFH(true)
-    await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
-    setIsStakingDFH(false)
+    try {
+      await callWithGasPrice(contributePoolContract, 'stakeDfh', [id])
+    } finally {
+      setIsStakingDFH(false)
+    }
   }, [callWithGasPrice, contributePoolContract, id])
   const isStakeDFHButtonDisabled =
     Date.now() > endCampaignTimestamp ||

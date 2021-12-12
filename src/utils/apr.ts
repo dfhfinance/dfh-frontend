@@ -42,6 +42,7 @@ export const getFarmApr = (
   if (!cakeRewardsApr.isNaN() && cakeRewardsApr.isFinite()) {
     cakeRewardsAprAsNumber = cakeRewardsApr.toNumber()
   }
+  // TODO: thanhnv- add thêm lpApr LP token liên quan đến dfh vào file json
   const lpRewardsApr = lpAprs[farmAddress?.toLocaleLowerCase()] ?? 0
   return { cakeRewardsApr: cakeRewardsAprAsNumber, lpRewardsApr }
 }

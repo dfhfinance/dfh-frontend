@@ -31,17 +31,14 @@ export interface PoolInfo {
   image: string
 }
 
-export default function useContributePoolInfos(): PoolInfo[] {
+export default function useContributePoolInfos() {
   const contributePoolContract = useContributePoolContract()
   const [poolInfos, setPoolInfos] = useState<PoolInfo[]>()
-  const isFetching = useRef(false)
   const { currentBlock } = useBlock()
+  const [isInitializing, setIsInitializing] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFetching.current) return
-
-      isFetching.current = true
       const numberOfPoolsBn = await contributePoolContract.poolLength()
       const numberOfPools: number = numberOfPoolsBn.toNumber()
       const promises = []
@@ -74,11 +71,11 @@ export default function useContributePoolInfos(): PoolInfo[] {
         }
       })
       setPoolInfos(newPoolInfos)
-      isFetching.current = false
+      setIsInitializing(false)
     }
 
     fetchData()
   }, [contributePoolContract, currentBlock])
 
-  return poolInfos
+  return [isInitializing, poolInfos] as const
 }

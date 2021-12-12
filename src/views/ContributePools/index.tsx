@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useState } from 'react'
-import { Box, Flex, Text } from '@dfh-finance/uikit'
+import React, { useEffect, useState } from 'react'
+import { Box, Flex } from '@dfh-finance/uikit'
 import styled from 'styled-components'
 import ContributePoolCard from 'views/ContributePools/ContributePoolCard'
 import useContributePoolInfos, { PoolInfo, PoolStatus } from 'views/ContributePools/hooks/useContributedPoolInfos'
 import TabButtons from 'views/ContributePools/TabButtons'
-import { useLocation, useRouteMatch } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useMyPoolIds from 'views/ContributePools/hooks/useMyPoolIds'
 
@@ -16,6 +16,7 @@ const CardWrapper = styled(Box)`
   flex-wrap: wrap;
   margin: 0 auto;
   padding: 36px 16px;
+  color: white;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 36px;
@@ -58,7 +59,7 @@ const Filters = styled(Flex)`
 
 export default function ContributePool() {
   const { t } = useTranslation()
-  const poolInfos = useContributePoolInfos()
+  const [isInitializing, poolInfos] = useContributePoolInfos()
   const myPoolIds = useMyPoolIds()
   const location = useLocation()
   const [filteredPoolInfos, setFilteredPoolInfos] = useState<PoolInfo[]>()
@@ -98,11 +99,13 @@ export default function ContributePool() {
         <TabButtons />
       </Filters>
       <CardWrapper>
-        {filteredPoolInfos &&
-          filteredPoolInfos.map((poolInfo, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <ContributePoolCard key={poolInfo.id} poolInfo={poolInfo} />
-          ))}
+        {isInitializing
+          ? 'Loading...'
+          : filteredPoolInfos &&
+            filteredPoolInfos.map((poolInfo, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <ContributePoolCard key={poolInfo.id} poolInfo={poolInfo} />
+            ))}
       </CardWrapper>
     </Box>
   )

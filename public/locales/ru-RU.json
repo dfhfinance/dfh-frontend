@@ -469,7 +469,7 @@
   "Search Farms": "Поиск ферм",
   "To Top": "Наверх",
   "Total value of the funds in this farm’s liquidity pool": "Общая стоимость средств в пуле ликвидности этой фермы",
-  "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.": "Множитель представляет собой пропорциональную часть вознаграждения CAKE, получаемого каждой фермой, в качестве части CAKE, произведенного каждым блоком.",
+  "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.": "Множитель представляет собой пропорциональную часть вознаграждения CAKE, получаемого каждой фермой, в качестве части CAKE, произведенного каждым блоком.",
   "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.": "Например, если ферма 1x получает 1 CAKE за каждый блок, ферма 40x получит 40 CAKE за каждый блок.",
   "This amount is already included in all APR calculations for the farm.": "Эта сумма уже включена во все расчеты APR для фермы.",
   "Hot": "В тренде",

@@ -469,7 +469,7 @@
   "Search Farms": "Caută ferme",
   "To Top": "În sus",
   "Total value of the funds in this farm’s liquidity pool": "Valoarea totală a fondurilor din portofoliul de lichidități al acestei ferme",
-  "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.": "Multiplicatorul reprezintă proporția din recompensele CAKE pe care o primește fiecare fermă, ca proporția de CAKE produsă de fiecare bloc.",
+  "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.": "Multiplicatorul reprezintă proporția din recompensele CAKE pe care o primește fiecare fermă, ca proporția de CAKE produsă de fiecare bloc.",
   "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.": "De exemplu, dacă o fermă de 1x a primit 1 CAKE per bloc, o fermă de 40x va primi 40 de CAKE per bloc.",
   "This amount is already included in all APR calculations for the farm.": "Această sumă este deja inclusă în toate calculele APR pentru fermă.",
   "Hot": "Fierbinte",

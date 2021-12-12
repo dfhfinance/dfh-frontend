@@ -469,7 +469,7 @@
   "Search Farms": "Αναζήτηση φάρμας",
   "To Top": "Στην κορυφή",
   "Total value of the funds in this farm’s liquidity pool": "Συνολική αξία χρημάτων στη δεξαμενή ρευστότητας αυτής της φάρμας",
-  "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.": "Ο Πολλαπλασιαστής αντιπροσωπεύει την αναλογία του CAKE που λαμβάνει κάθε farm, ως ποσοστό του CAKE που παράγει κάθε μπλοκ.",
+  "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.": "Ο Πολλαπλασιαστής αντιπροσωπεύει την αναλογία του CAKE που λαμβάνει κάθε farm, ως ποσοστό του CAKE που παράγει κάθε μπλοκ.",
   "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.": "Για παράδειγμα, εάν μία farm 1x λαμβάνει 1 CAKE ανά μπλοκ, μία farm 40x θα λάβει 40 CAKE ανά μπλοκ.",
   "This amount is already included in all APR calculations for the farm.": "Αυτό το ποσό περιλαμβάνεται ήδη σε όλους τους υπολογισμούς APR της farm.",
   "Hot": "Δημοφιλή",

@@ -469,7 +469,7 @@
   "Search Farms": "Procurar fazenda",
   "To Top": "Para cima",
   "Total value of the funds in this farm’s liquidity pool": "Valor total dos fundos na reserva de liquidez da fazenda",
-  "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.": "O Multiplicador representa a proporção de recompensas de CAKE que cada fazenda recebe, como uma proporção do CAKE produzido por cada bloco.",
+  "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.": "O Multiplicador representa a proporção de recompensas de CAKE que cada fazenda recebe, como uma proporção do CAKE produzido por cada bloco.",
   "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.": "Por exemplo, se uma fazenda 1x recebeu 1 CAKE por bloco, uma fazenda 40x poderia receber 40 CAKE por bloco.",
   "This amount is already included in all APR calculations for the farm.": "Este valor já está incluído em todos os cálculos de APR da fazenda.",
   "Hot": "Popular",

@@ -58,7 +58,7 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
     <>
       <Text>
         {t(
-          'The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.',
+          'The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.',
         )}
       </Text>
       <Text my="24px">

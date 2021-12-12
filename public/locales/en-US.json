@@ -469,7 +469,7 @@
   "Search Farms": "Search Farms",
   "To Top": "To Top",
   "Total value of the funds in this farm’s liquidity pool": "Total value of the funds in this farm’s liquidity pool",
-  "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.": "The Multiplier represents the proportion of CAKE rewards each farm receives, as a proportion of the CAKE produced each block.",
+  "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.": "The Multiplier represents the proportion of DFH rewards each farm receives, as a proportion of the DFH produced each block.",
   "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.": "For example, if a 1x farm received 1 CAKE per block, a 40x farm would receive 40 CAKE per block.",
   "This amount is already included in all APR calculations for the farm.": "This amount is already included in all APR calculations for the farm.",
   "Hot": "Hot",

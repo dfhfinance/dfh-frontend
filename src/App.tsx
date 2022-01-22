@@ -20,6 +20,8 @@ import GlobalCheckClaimStatus from './components/GlobalCheckClaimStatus'
 import history from './routerHistory'
 // Views included in the main bundle
 import ContributePools from './views/ContributePools'
+import ContributePoolDashboard from './views/ContributePools2/Dashboard'
+
 import Swap from './views/Swap'
 import {
   RedirectDuplicateTokenIds,
@@ -90,6 +92,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/pools">
               <ContributePools />
+            </Route>
+            <Route path="/pools2">
+              <ContributePoolDashboard />
             </Route>
             <Route path="/lottery">
               <Lottery />

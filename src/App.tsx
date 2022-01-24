@@ -20,7 +20,8 @@ import GlobalCheckClaimStatus from './components/GlobalCheckClaimStatus'
 import history from './routerHistory'
 // Views included in the main bundle
 import ContributePools from './views/ContributePools'
-import ContributePoolDashboard from './views/ContributePools2/Dashboard'
+import ContributePoolsDashboard from './views/ContributePools2/Dashboard'
+import ContributePoolsDetail from './views/ContributePools2/Detail'
 
 import Swap from './views/Swap'
 import {
@@ -93,8 +94,11 @@ const App: React.FC = () => {
             <Route path="/pools">
               <ContributePools />
             </Route>
-            <Route path="/pools2">
-              <ContributePoolDashboard />
+            <Route exact strict path="/pools2">
+              <ContributePoolsDashboard />
+            </Route>
+            <Route exact strict path="/pools2/:id">
+              <ContributePoolsDetail />
             </Route>
             <Route path="/lottery">
               <Lottery />

@@ -1,32 +1,26 @@
+import React, { useState } from 'react'
 import styled from 'styled-components'
-
-import React from 'react'
 import { Flex } from '@dfh-finance/uikit'
+import Card from 'views/ContributePools2/Dashboard/components/Card'
 
-const CardWrapper = styled(Flex)`
-  margin: 0 auto;
-  padding: 36px 16px;
+const Container = styled.div`
+  margin: 36px auto;
   color: white;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 36px;
-    grid-gap: 36px;
-  }
+  max-width: calc(100vw - 32px);
 
   ${({ theme }) => theme.mediaQueries.md} {
-    padding: 48px 64px;
-    font-size: 20px;
+    max-width: 1200px;
   }
 `
 
 const Banner = styled.div`
-  display: grid;
-  grid-template-columns: 40% 60%;
   width: 100%;
-  padding: 8px 24px;
-  grid-gap: 20px;
-  background-image: url('/images/background-home.png');
-  boder-radius: 5px;
+  border-radius: 20px;
+  background: #2a2828;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: flex;
+  }
 `
 
 const BannerImage = styled.div`
@@ -34,8 +28,16 @@ const BannerImage = styled.div`
   background-size: 100%;
   background-repeat: no-repeat;
   height: 350px;
+  width: 100%;
+  display: none;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: revert;
+  }
 `
-const BannerContent = styled.div``
+const BannerContent = styled.div`
+  padding: 16px;
+`
 
 const ContentCenter = styled(Flex)`
   justify-content: center;
@@ -45,18 +47,21 @@ const ContentCenter = styled(Flex)`
 
 const BannerStyle = styled(ContentCenter)`
   color: #ffad2c;
-  font-size: 48px;
   text-transform: uppercase;
 `
 
 const BannerHeaderText = styled(BannerStyle)`
   font-weight: 700;
+  font-size: 32px;
 `
 
-const BannerHeaderDescription = styled(BannerStyle)``
+const BannerHeaderDescription = styled(BannerStyle)`
+  font-size: 16px;
+  margin-top: 4px;
+`
 
 const BannerDescription = styled(ContentCenter)`
-  font-size: 22px;
+  font-size: 18px;
   padding: 30px 0 40px;
   display: table-cell;
   vertical-align: middle;
@@ -66,10 +71,11 @@ const BannerDescription = styled(ContentCenter)`
 const BannerCommunityContainer = styled.div`
   display: grid;
   margin: 0 30px;
+  grid-template-columns: 1fr;
+
   ${({ theme }) => theme.mediaQueries.md} {
     grid-template-columns: repeat(3, 1fr);
   }
-  grid-template-columns: 1fr;
 `
 
 const BannerCommunityItem = styled.div``
@@ -81,23 +87,40 @@ const BannerCommunityItemNumber = styled(ContentCenter)`
 
 const BannerCommunityItemText = styled(ContentCenter)`
   margin: 10px 0 20px;
+  color: #938a8a;
 `
 
-const TabSection = styled.div``
+const Tabs = styled(Flex)`
+  margin: 16px 0;
+`
 
-const UnderLineTab = styled.div``
+const TabItem = styled.div<{ active: boolean }>`
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  color: ${({ active }) => (active ? '#ffad2c' : 'grey')};
+  cursor: pointer;
 
-const TabActive = styled.div``
+  ${({ active }) => active && 'border-bottom: 5px solid #f5a540;'};
+`
 
-const MainContent = styled.div`
+const Cards = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-`
-const MainContentCardWrapper = styled.div``
+  grid-template-columns: 1fr;
+  gap: 32px;
 
-export default function ContributePoolDashboard() {
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 64px;
+  }
+`
+
+export default function ContributePoolsDashboard() {
+  const [tabIndex, setTabIndex] = useState(0)
+
   return (
-    <CardWrapper>
+    <Container>
       <Banner>
         <BannerImage />
         <BannerContent>
@@ -123,6 +146,19 @@ export default function ContributePoolDashboard() {
           </BannerCommunityContainer>
         </BannerContent>
       </Banner>
-    </CardWrapper>
+      <Tabs>
+        <TabItem active={tabIndex === 0} onClick={() => setTabIndex(0)}>
+          Dự án đang đóng góp
+        </TabItem>
+        <TabItem active={tabIndex === 1} onClick={() => setTabIndex(1)}>
+          Dự án đã hoàn thành
+        </TabItem>
+      </Tabs>
+      <Cards>
+        <Card />
+        <Card />
+        <Card />
+      </Cards>
+    </Container>
   )
 }
